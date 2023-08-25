@@ -19,7 +19,7 @@
     $scope.moveNext = moveNext;
     $scope.movePrevious = movePrevious;
     $scope.moveEnvironmentNext = moveEnvironmentNext;
-    $scope.envMacro = "threat_hunt_env";
+    $scope.envMacro = "threat_hunt_integrations";
     $scope.selectedEnv = {};
     $scope.formHolder={};
       
