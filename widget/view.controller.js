@@ -2,13 +2,11 @@
 (function () {
     angular
         .module('cybersponse')
-        .controller('outbreakAlertConfiguration100Ctrl', outbreakAlertConfiguration100Ctrl);
+        .controller('outbreakAlertConfiguration100DevCtrl', outbreakAlertConfiguration100DevCtrl);
 
-        outbreakAlertConfiguration100Ctrl.$inject = ['$q', 'API', '$resource', '$scope', 'Entity', '$http', 'connectorService', 'currentPermissionsService', 
-        'WizardHandler', 'toaster', 'CommonUtils', '$controller', '$window', 'Field'];
+        outbreakAlertConfiguration100DevCtrl.$inject = ['$scope', 'Entity', '$http', 'WizardHandler', '$controller'];
 
-    function outbreakAlertConfiguration100Ctrl($q, API, $resource, $scope, Entity, $http, connectorService, currentPermissionsService, 
-      WizardHandler, toaster, CommonUtils, $controller, $window, Field) {
+    function outbreakAlertConfiguration100DevCtrl($scope, Entity, $http, WizardHandler, $controller) {
     $controller('BaseConnectorCtrl', {
       $scope: $scope
     });
@@ -19,23 +17,7 @@
     $scope.moveNext = moveNext;
     $scope.movePrevious = movePrevious;
     $scope.moveEnvironmentNext = moveEnvironmentNext;
-    $scope.envMacro = "threat_hunt_integrations";
     $scope.selectedEnv = {};
-    $scope.formHolder={};
-      
-    function _loadDynamicVariable(variableName) {
-      var defer = $q.defer();
-      var dynamicVariable = null;
-      $resource(API.WORKFLOW + 'api/dynamic-variable/?offset=0&name='+variableName).get({}, function(data) {
-        if (data['hydra:member'].length > 0) {
-          dynamicVariable = data['hydra:member'][0].value;
-        }
-        defer.resolve(dynamicVariable);
-      }, function(response) {
-        defer.reject(response);
-      });
-      return defer.promise;
-    }
       
     function close(){
         triggerPlaybook();
@@ -43,14 +25,9 @@
     }
 
     function moveNext() {
-        _loadDynamicVariable($scope.envMacro).then(function(dynamicVariable) {
-          if (dynamicVariable !== null ){
-            $scope.selectedEnv = {"picklist": JSON.parse(dynamicVariable)};
-          }
-        });
-        $scope.processingPicklist = true;
-        var entity = new Entity('outbreak_alerts');
-        entity.loadFields().then(function () {
+          $scope.processingPicklist = true;
+          var entity = new Entity('outbreak_alerts');
+          entity.loadFields().then(function () {
             for (var key in entity.fields) {
                 if (entity.fields[key].type === 'picklist' && key === 'threatHuntTools') {
                     $scope.picklistField = entity.fields.threatHuntTools;
@@ -58,6 +35,7 @@
                 }
             }
         });
+        
         WizardHandler.wizard('solutionpackWizard').next();
     }
       
