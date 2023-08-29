@@ -2,11 +2,11 @@
 (function () {
     angular
         .module('cybersponse')
-        .controller('outbreakAlertConfiguration100DevCtrl', outbreakAlertConfiguration100DevCtrl);
+        .controller('outbreakAlertConfiguration100Ctrl', outbreakAlertConfiguration100DevCtrl);
 
-        outbreakAlertConfiguration100DevCtrl.$inject = ['$scope', 'Entity', '$http', 'WizardHandler', '$controller'];
+        outbreakAlertConfiguration100Ctrl.$inject = ['$scope', 'Entity', '$http', 'WizardHandler', '$controller'];
 
-    function outbreakAlertConfiguration100DevCtrl($scope, Entity, $http, WizardHandler, $controller) {
+    function outbreakAlertConfiguration100Ctrl($scope, Entity, $http, WizardHandler, $controller) {
     $controller('BaseConnectorCtrl', {
       $scope: $scope
     });
@@ -40,10 +40,6 @@
     }
       
     function moveEnvironmentNext() {
-        WizardHandler.wizard('solutionpackWizard').next();
-    }
-
-    function moveVersionControlNext() {
         WizardHandler.wizard('solutionpackWizard').next();
     }
 
