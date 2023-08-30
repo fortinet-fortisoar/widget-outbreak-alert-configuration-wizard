@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="outbreakAlertConfiguration-1.0.0/style.css" />
 <div class="modal-header">
-  <h3 class="modal-title col-md-9">Outbreak Alert Threat Hunting Configuration</h3>
+  <h3 class="modal-title col-md-9">Outbreak Alert Management Framework Configuration</h3>
 </div>
 
   <wizard on-finish="close()" indicators-position="top" class="cs-wizard ingestion-steps solutionpack-wizard-steps"
@@ -10,13 +10,13 @@
         <div class="full-height overflow-auto">
           <div class="display-table fixed-table-layout full-height full-width">
             <div class="full-height display-table-cell vertical-align-middle">
-              <div class="col-md-5 display-flex" style="justify-content: center">
-                  <img class="img-responsive" src="widgets/installed/outbreakAlertConfiguration-1.0.0/images/ThreatHunting.png">
+              <div class="col-md-6 display-flex" style="justify-content: center">
+                <img class="img-responsive step-image" src="widgets/installed/outbreakAlertConfiguration-1.0.0/images/threat_hunt.png">
               </div>
               <div class="col-md-6 prerequisites-section padding-bottom-25 padding-left-0">
-                <div class="font-size-40 line-height-1">Outbreak Alert Threat Hunting Configuration</div><br />
+                <div class="font-size-40 line-height-1">Outbreak Alert Management Framework Configuration</div><br />
                 <div class="padding-right-30 margin-top-sm max-width-450px">
-                  <p class="font-size-14 margin-bottom-0">This wizard guides you through the initial configuration steps required to prepare your FortiSOAR environment for Outbreak Alert Threat Hunting with your configured SIEM solutions.</p>
+                  <p class="font-size-14 margin-bottom-0">This wizard guides you through the initial setup required to prepare your FortiSOAR environment for Outbreak Alert Monitoring and Investigation. This involves selecting your threat detection solutions(e.g. SIEM/UEBA) for enabling outbreak alert hunt activities and setting up response strategies (e.g. patch recommendations, ticketing solution integrations etc.) for mitigation.</p>
                 </div>
                 <button type="button" class="btn btn-primary btn-sm margin-top-xlg text-transform-none font-size-14"
                   data-ng-click="moveNext()" id="solutionpack-next-btn">Let's get started<i
@@ -36,13 +36,13 @@
                   <img class="img-responsive step-image" src="widgets/installed/outbreakAlertConfiguration-1.0.0/images/environment.png">
               </div>
               <div class="col-md-6 prerequisites-section padding-bottom-25 padding-left-0">
-              <div class="font-size-40 line-height-1">Threat Hunting Integrations</div><br/>
+              <div class="font-size-40 line-height-1">Threat Detection Integrations</div><br/>
               <div class="padding-right-30 margin-top-sm max-width-450px">
-                  <p class="font-size-14 margin-bottom-0">To use tasks and workflows relevant for Outbreak Alert Threat Hunting with your configured SIEM solutions. </p><br/>
-                  <p class="font-size-14 margin-bottom-0">You may select multiple Threat Hunting integrations for outbreak alerts</p><br />
+                  <p class="font-size-14 margin-bottom-0">Select your SIEM/UEBA or other threat detection sources, to run outbreak behavior hunt activities on. This will enable the relevant workflows and configurations in the background to facilitate the threat hunt. </p><br/>
+                  <p class="font-size-14 margin-bottom-0">You may select multiple Threat Detection Integrations.</p><br />
               </div>
                 <div data-ng-if="!processingPicklist" class="cs-select">
-                  <ui-select name="select_env" id="select_env" data-ng-model="selectedEnv.picklist" data-ng-required="true"
+                  <ui-select name="select_env" id="select_env" data-ng-model="selectedEnv.huntTools" data-ng-required="true"
                     multiple class="custom-multi-select" append-to-body="false">
                     <ui-select-match placeholder="Select Integrations...">{{$item.itemValue}}
                     </ui-select-match>
@@ -61,8 +61,47 @@
       <div class="ingestion-modal-footer">
         <button type="button" class="btn btn-sm btn-second-primary margin-top-lg margin-left-lg"
           id="solutionpack-configure-back-env-btn" data-ng-click="movePrevious()"><i class="fa fa-chevron-left margin-right-sm"></i>Back</button>
-        <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg" data-ng-click="moveEnvironmentNext()" data-ng-disabled="Object.keys(selectedEnv).length === 0 || selectedEnv.picklist.length === 0"
+        <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg" data-ng-click="moveTktNext()" data-ng-disabled="Object.keys(selectedEnv).length === 0 || selectedEnv.picklist.length === 0"
           id="solutionpack-configure-env-next-btn">Next<i class="fa fa-chevron-right margin-left-sm"></i>
+        </button>
+      </div>
+    </wz-step>
+    <wz-step wz-title="Ticketing Integrations" wz-order="3" class="ingestion-modal-padding">
+      <div class="full-width wz-step-height padding-bottom-md solutionpack-wizard-modal-body">
+        <div class="full-height overflow-auto">
+            <div class="display-table fixed-table-layout full-height full-width">
+            <div class="full-height display-table-cell vertical-align-middle">
+              <div class="col-md-6 display-flex" style="justify-content: center">
+                  <img class="img-responsive step-image" src="widgets/installed/outbreakAlertConfiguration-1.0.0/images/environment.png">
+              </div>
+              <div class="col-md-6 prerequisites-section padding-bottom-25 padding-left-0">
+              <div class="font-size-40 line-height-1">Ticketing/ITSM Integrations</div><br/>
+              <div class="padding-right-30 margin-top-sm max-width-450px">
+                  <p class="font-size-14 margin-bottom-0">As part of your response or threat management strategy, you can optionally select your preferred ticketing solution to automatically create a tracking ticket in the ticketing solution for all alerts detected from the outbreak threat hunt activity in FortiSOAR. </p><br/>
+                  <p class="font-size-14 margin-bottom-0">You may select multiple Ticketing/ITSM Integrations</p><br />
+              </div>
+                <div data-ng-if="!ticketingPicklist" class="cs-select">
+                  <ui-select name="select_tkt" id="select_tkt" data-ng-model="selectedEnv.ticketTools" data-ng-required="true"
+                    multiple class="custom-multi-select" append-to-body="false">
+                    <ui-select-match placeholder="Select Integrations...">{{$item.itemValue}}
+                    </ui-select-match>
+                    <ui-select-choices
+                      repeat="field in tktPicklistField.options | filter: $select.search | orderBy: 'name'"
+                      refresh-delay="200" ng-show="($select.items.length > 0) ||">
+                      <div ng-bind-html="field.itemValue | highlight: $select.search"></div>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ingestion-modal-footer">
+        <button type="button" class="btn btn-sm btn-second-primary margin-top-lg margin-left-lg"
+          id="solutionpack-configure-back-tkt-btn" data-ng-click="moveTktPrevious()"><i class="fa fa-chevron-left margin-right-sm"></i>Back</button>
+        <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg" data-ng-click="moveEnvironmentNext()" data-ng-disabled="Object.keys(selectedEnv).length === 0 || selectedEnv.picklist.length === 0"
+          id="solutionpack-configure-tkt-next-btn">Next<i class="fa fa-chevron-right margin-left-sm"></i>
         </button>
       </div>
     </wz-step>
@@ -78,6 +117,7 @@
                 <div class="font-size-40 line-height-1">You are all set!</div><br />
                 <div class="padding-right-30 margin-top-sm max-width-450px">
                   <p class="font-size-14 margin-bottom-0">All prerequisites have been configured successfully.</p><br />
+                  <p class="font-size-14 margin-bottom-0">You can now install the available specific outbreak alert solution packs, for monitoring and investigating various outbreaks reported.</p>
                   <p class="font-size-14 margin-bottom-0">You may now navigate to the 'Outbreak Alert Management' tab in the navigation and start using the solution.</p>
                 </div>
               </div>

@@ -3,7 +3,6 @@
     "version": "1.0.0",
     "title": "Outbreak Alert Configuration Wizard",
     "subTitle": "Outbreak Alert Configuration Wizard will provide to select the Threat Hunting integrations which are configured in FortiSOAR",
-    "published_date": "1692867426",
     "metadata": {
         "pages": [],
         "certified": "Yes",
