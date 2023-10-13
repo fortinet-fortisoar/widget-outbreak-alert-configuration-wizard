@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="outbreakAlertConfiguration-1.0.0/style.css" />
 <div class="modal-header">
-  <h3 class="modal-title col-md-9">Outbreak Alert Management Framework Configuration</h3>
+  <h3 class="modal-title col-md-9">Outbreak Response Framework Configuration</h3>
 </div>
 
   <wizard on-finish="close()" indicators-position="top" class="cs-wizard ingestion-steps solutionpack-wizard-steps"
@@ -38,17 +38,16 @@
               <div class="col-md-6 prerequisites-section padding-bottom-25 padding-left-0">
               <div class="font-size-40 line-height-1">Threat Detection Integrations</div><br/>
               <div class="padding-right-30 margin-top-sm max-width-450px">
-                  <p class="font-size-14 margin-bottom-0">Select your SIEM/UEBA or other threat detection sources, to run outbreak behavior hunt activities on. This will enable the relevant workflows and configurations in the background to facilitate the threat hunt. </p><br/>
+                  <p class="font-size-14 margin-bottom-0">Select your SIEM/UEBA or other threat detection sources, to run outbreak response hunt activities. This will enable the relevant workflows and configurations in the background to facilitate the threat hunt. </p><br/>
                   <p class="font-size-14 margin-bottom-0">You may select multiple Threat Detection Integrations.</p><br />
               </div>
                 <div data-ng-if="!processingPicklist" class="cs-select">
-                  <ui-select name="select_env" id="select_env" data-ng-model="selectedEnv.huntTools" data-ng-required="true"
-                    multiple class="custom-multi-select" append-to-body="false">
+                  <ui-select name="select_env" id="select_env" data-ng-model="selectedEnv.huntTools" data-ng-required="true" multiple class="custom-multi-select" append-to-body="false">
                     <ui-select-match placeholder="Select Integrations...">{{$item.itemValue}}
                     </ui-select-match>
                     <ui-select-choices
                       repeat="field in picklistField.options | filter: $select.search | orderBy: 'name'"
-                      refresh-delay="200" ng-show="($select.items.length > 0) ||">
+                      refresh-delay="200" ng-show="($select.items && $select.items.length > 0)">
                       <div ng-bind-html="field.itemValue | highlight: $select.search"></div>
                     </ui-select-choices>
                   </ui-select>
@@ -61,7 +60,7 @@
       <div class="ingestion-modal-footer">
         <button type="button" class="btn btn-sm btn-second-primary margin-top-lg margin-left-lg"
           id="solutionpack-configure-back-env-btn" data-ng-click="movePrevious()"><i class="fa fa-chevron-left margin-right-sm"></i>Back</button>
-        <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg" data-ng-click="moveTktNext()" data-ng-disabled="Object.keys(selectedEnv).length === 0 || selectedEnv.picklist.length === 0"
+        <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg" data-ng-click="moveTktNext()" data-ng-disabled="(selectedEnv.huntTools && selectedEnv.huntTools.length === 0) || (selectedEnv.picklist && selectedEnv.picklist.length === 0)"
           id="solutionpack-configure-env-next-btn">Next<i class="fa fa-chevron-right margin-left-sm"></i>
         </button>
       </div>
@@ -80,18 +79,9 @@
                   <p class="font-size-14 margin-bottom-0">As part of your response or threat management strategy, you can optionally select your preferred ticketing solution to automatically create a tracking ticket in the ticketing solution for all alerts detected from the outbreak threat hunt activity in FortiSOAR. </p><br/>
                   <p class="font-size-14 margin-bottom-0">You may select multiple Ticketing/ITSM Integrations</p><br />
               </div>
-                <div data-ng-if="!ticketingPicklist" class="cs-select">
-                  <ui-select name="select_tkt" id="select_tkt" data-ng-model="selectedEnv.ticketTools" data-ng-required="true"
-                    multiple class="custom-multi-select" append-to-body="false">
-                    <ui-select-match placeholder="Select Integrations...">{{$item.itemValue}}
-                    </ui-select-match>
-                    <ui-select-choices
-                      repeat="field in tktPicklistField.options | filter: $select.search | orderBy: 'name'"
-                      refresh-delay="200" ng-show="($select.items.length > 0) ||">
-                      <div ng-bind-html="field.itemValue | highlight: $select.search"></div>
-                    </ui-select-choices>
-                  </ui-select>
-                </div>
+                <div class="cs-select">
+                  <select id="select_tkt" name="select_tkt" data-ng-model="selectedEnv.ticketTools" class="form-control ng-pristine ng-valid ng-not-empty ng-touched" data-ng-options="field.itemValue for field in tktPicklistField.options | filter: $select.search | orderBy: 'name'" aria-invalid="false">
+                  </select><span class="fa fa-sort-desc"></span></div>
             </div>
             </div>
           </div>
