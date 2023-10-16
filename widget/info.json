@@ -1,8 +1,8 @@
 {
     "name": "outbreakAlertConfiguration",
     "version": "1.0.0",
-    "title": "Outbreak Alert Configuration Wizard",
-    "subTitle": "Outbreak Alert Configuration Wizard will provide to select the Threat Hunting integrations which are configured in FortiSOAR",
+    "title": "Outbreak Response Framework Configuration Wizard",
+    "subTitle": "Outbreak Response Framework Configuration Wizard will provide to select the \"Threat Detection Integrations\" sources to run outbreak response hunt activities and \"Ticketing\/ITSM Integrations\" sources as part of your response or threat management strategy in FortiSOAR",
     "published_date": "1692867426",
     "metadata": {
         "pages": [],
@@ -10,7 +10,7 @@
         "publisher": "Fortinet",
         "snapshots": [],
         "standalone": true,
-        "description": "Outbreak Alert Configuration Wizard will provide to select the Threat Hunting integrations which are configured in FortiSOAR",
+        "description": "Outbreak Response Framework Configuration Wizard will provide to select the \"Threat Detection Integrations\" sources to run outbreak response hunt activities and \"Ticketing\/ITSM Integrations\" sources as part of your response or threat management strategy in FortiSOAR",
         "help_online": "https:\/\/github.com\/fortinet-fortisoar\/widget-outbreak-alert-configuration-wizard\/blob\/release\/1.0.0\/README.md",
         "windowClass": "Full Width",
         "compatibility": [
