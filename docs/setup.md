@@ -17,7 +17,7 @@
 
 The configuration settings of the Outbreak Response Framework Configuration widget include the following steps:
 
-- Click the **Configure** button to bring up the following wizard screen
+- Click the **Configure** button to bring up the wizard screen
   
     ![CICD Configration](./res/config-wizard-00.png)
 
@@ -34,6 +34,7 @@ The configuration settings of the Outbreak Response Framework Configuration widg
     ![Define your Ticketing/ITSM Integrations](./res/config-wizard-03.png)
 
 - Click **Finish** to complete the configuration process.
+- 
     ![All set](./res/config-wizard-04.png)
 
 Navigate to the **Outbreak Alerts** in the navigation menu to start using the solution pack
