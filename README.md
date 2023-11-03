@@ -12,7 +12,7 @@
 
 # Overview
 
-
+The Outbreak Response Framework Configuration widget helps set up Threat Detection and Ticketing/ITSM integrations and also helps in streamlining the outbreak response lifecycle.
 
 ## Next Steps
 
