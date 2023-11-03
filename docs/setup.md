@@ -38,3 +38,8 @@ The configuration settings of the Outbreak Response Framework Configuration widg
     ![All set](./res/config-wizard-04.png)
 
 Navigate to the **Outbreak Alerts** in the navigation menu to start using the solution pack
+
+
+# Next Steps
+| [Installation](./setup.md#installation) | [Configuration](./setup.md#configuration) |
+| ----------------------------------------- | ------------------------------------------- |
