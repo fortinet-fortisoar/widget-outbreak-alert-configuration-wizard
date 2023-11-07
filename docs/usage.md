@@ -7,9 +7,9 @@ The Outbreak Response Framework Configuration Wizard widget helps set up Threat 
 
 ## Features
 
-- `Threat Detection integrations` - Helps choose the Threat Detection integrations available in your FortiSOAR 
+- `Threat Detection integrations` - Helps choose available Threat Detection integrations
 
-- `Ticketing/ITSM integrations` - Helps choose the Ticketing/ITSM integrations available in your FortiSOAR
+- `Ticketing/ITSM integrations` - Helps choose available Ticketing/ITSM integrations
 
 
 # Next Steps
