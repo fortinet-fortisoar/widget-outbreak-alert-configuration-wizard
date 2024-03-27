@@ -2,10 +2,10 @@
 
 **##Textual Bug Fixes##**
 
-Ticketing/ITSM Integrations page: 
+1. Ticketing/ITSM Integrations page: 
 
-"You may select multiple Ticketing/ITSM Integrations" changed to "You may select a single Ticketing/ITSM Integrations"
+  "You may select multiple Ticketing/ITSM Integrations" changed to "You may select a single Ticketing/ITSM Integrations"
 
-Finish Page:
+2. Finish Page:
 
-'Outbreak Alert Management' changed to 'Outbreak Management'.
+  'Outbreak Alert Management' changed to 'Outbreak Management'.
