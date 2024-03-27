@@ -1,4 +1,3 @@
-# Release Notes
 # What's New
 
 **##Textual Bug Fixes##**
