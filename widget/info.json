@@ -1,6 +1,6 @@
 {
     "name": "outbreakAlertConfiguration",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "title": "Outbreak Response Framework Configuration Wizard",
     "subTitle": "Outbreak Response Framework Configuration Wizard will provide to select the \"Threat Detection Integrations\" sources to run outbreak response hunt activities and \"Ticketing\/ITSM Integrations\" sources as part of your response or threat management strategy in FortiSOAR",
     "published_date": "1692867426",
