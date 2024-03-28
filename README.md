@@ -10,6 +10,8 @@
 
 - **Applicable**: Outbreak Response Framework Solution Pack
 
+- [**Release Notes**](./docs/release_notes.md)
+
 # Overview
 
 The **Outbreak Response Framework Configuration** widget helps set up and configure *Threat Detection* and *Ticketing/ITSM* integrations. This widget is responsible for running the wizard that streamlines the Outbreak response framework configuration.
