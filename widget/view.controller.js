@@ -6,7 +6,7 @@
 (function () {
     angular
         .module('cybersponse')
-        .controller('outbreakAlertConfiguration101Ctrl', outbreakAlertConfiguration100Ctrl);
+        .controller('outbreakAlertConfiguration101Ctrl', outbreakAlertConfiguration101Ctrl);
 
     outbreakAlertConfiguration101Ctrl.$inject = ['$scope', 'Entity', '$http', 'WizardHandler', '$controller'];
 
