@@ -10,7 +10,7 @@
 
 - **Applicable**: Outbreak Response Framework Solution Pack
 
-- [**Release Notes**](./widget/release_notes.md)
+- [**Release Notes**](./docs/release_notes.md)
 
 # Overview
 
