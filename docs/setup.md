@@ -21,7 +21,7 @@ After installation completes, open Content Hub.
 
 2. Click **Configure** on the lower part of the screen to launch this widget and initiate configuration.
   
-    ![Configure Outbreak Response](./res/config-wizard-00.png)
+    ![Configure Outbreak Response](./res/configwizard_101_00.png)
 
 3. Click the button **Let's get started** on the following Outbreak Response Framework configuration page:
 
@@ -35,7 +35,7 @@ After installation completes, open Content Hub.
 
 6. Select **Ticketing/ITSM Integration** sources as part of your response or threat management strategy. You can select multiple sources. Refer to the **Adding New Threat Detection or Ticketing Integrations** section under **Usage** in [**Outbreak Response Framework** solution pack documentation](https://github.com/fortinet-fortisoar/solution-pack-outbreak-response-framework/blob/release/1.0.0/docs/setup.md#adding-new-threat-detection-or-ticketing-integrations) to add additional **Ticketing/ITSM Integration** sources.
 
-    ![Select Ticketing/ITSM Integrations](./res/config-wizard-03.png)
+    ![Select Ticketing/ITSM Integrations](./res/configwizard_101_03.png)
 
 7. Click **Next** to proceed.
 8. Click **Finish** to complete the configuration process.
