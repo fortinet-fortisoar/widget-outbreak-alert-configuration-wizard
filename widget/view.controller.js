@@ -1,12 +1,16 @@
+/* Copyright start
+  MIT License
+  Copyright (c) 2024 Fortinet Inc
+  Copyright end */
 'use strict';
 (function () {
     angular
         .module('cybersponse')
-        .controller('outbreakAlertConfiguration100Ctrl', outbreakAlertConfiguration100Ctrl);
+        .controller('outbreakAlertConfiguration101Ctrl', outbreakAlertConfiguration101Ctrl);
 
-    outbreakAlertConfiguration100Ctrl.$inject = ['$scope', 'Entity', '$http', 'WizardHandler', '$controller'];
+    outbreakAlertConfiguration101Ctrl.$inject = ['$scope', 'Entity', '$http', 'WizardHandler', '$controller'];
 
-    function outbreakAlertConfiguration100Ctrl($scope, Entity, $http, WizardHandler, $controller) {
+    function outbreakAlertConfiguration101Ctrl($scope, Entity, $http, WizardHandler, $controller) {
         $controller('BaseConnectorCtrl', {
             $scope: $scope
         });

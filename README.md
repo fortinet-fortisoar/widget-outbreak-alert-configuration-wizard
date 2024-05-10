@@ -1,6 +1,6 @@
 # Release Information
 
-- **Version**: 1.0.0
+- **Version**: 1.0.1
 
 - **Certified**: Yes
 
@@ -9,6 +9,8 @@
 - **Compatibility**: 7.4.0 and later
 
 - **Applicable**: Outbreak Response Framework Solution Pack
+
+- [**Release Notes**](./docs/release_notes.md)
 
 # Overview
 
