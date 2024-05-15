@@ -433,7 +433,7 @@
                             <ui-select-match placeholder="Select Severity...">{{$item}}
                             </ui-select-match>
                             <ui-select-choices
-                              repeat="option in severityValues | filter: $select.search | orderBy: 'item'"
+                              repeat="option in outbreakAlertSeverityList | filter: $select.search | orderBy: 'item'"
                               refresh-delay="200" ng-show="($select.items.length > 0) ||">
                               <div ng-bind-html="option | highlight: $select.search"></div>
                             </ui-select-choices>

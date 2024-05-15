@@ -19,7 +19,7 @@
       scope: {
       },
       controller: 'BaseCtrl',
-      templateUrl: 'widgets/installed/outbreakAlertConfiguration-2.0.0/widgetAsset/schedulePlaybook.html',
+      templateUrl: 'widgets/installed/outbreakAlertConfiguration-2.0.0/widgetAssets/schedulePlaybook.html',
       link: link
     };
     function link(scope) {

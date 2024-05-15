@@ -45,7 +45,7 @@
         $scope.outbreakSettings = $scope.isLightTheme ? widgetBasePath + 'images/remediation-light.svg' : widgetBasePath + 'images/remediation-dark.svg';
         $scope.threatTuntSchedule = $scope.isLightTheme ? widgetBasePath + 'images/threat-hunt-schedule-light.svg' : widgetBasePath + 'images/threat-hunt-schedule-dark.svg';
         $scope.finishInfoGraphics = widgetBasePath + 'images/finish.png';
-        $scope.widgetCSS = widgetBasePath + 'widgetAsset/wizard-style.css';
+        $scope.widgetCSS = widgetBasePath + 'widgetAssets/wizard-style.css';
         $controller('BaseConnectorCtrl', {
             $scope: $scope
         });
@@ -65,7 +65,7 @@
             emailAddress: null,
             scheduleFrequency: null
         };
-        $scope.severityValues = ['Critical', 'High', 'Medium'];
+        $scope.outbreakAlertSeverityList = ['Critical', 'High', 'Medium'];
         $scope.$watch('activeTab', function ($newTab, $oldTab) {
             if (!$oldTab) {
                 // skip first run
@@ -355,7 +355,7 @@
                 });
                 return;
             } else {
-                $scope.selectedEnv.installOutbreakType = $scope.severityValues.slice();
+                $scope.selectedEnv.installOutbreakType = $scope.outbreakAlertSeverityList.slice();
                 WizardHandler.wizard('OutbreaksolutionpackWizard').next();
             }
         }
