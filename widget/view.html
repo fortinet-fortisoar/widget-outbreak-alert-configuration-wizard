@@ -2,77 +2,78 @@
   MIT License
   Copyright (c) 2024 Fortinet Inc
   Copyright end -->
-<link rel="stylesheet" type="text/css" href="{{widgetCSS}}" />
-<div class="modal-header">
-  <h3 class="modal-title col-md-9">Outbreak Response Framework Configuration</h3>
-</div>
-<wizard on-finish="close()" indicators-position="top"
-  class="cs-wizard ingestion-steps outbreak-config-steps solutionpack-wizard-steps outbreak-config-steps"
-  name="OutbreaksolutionpackWizard">
-  <wz-step wz-title="Start" wz-order="1" class="ingestion-modal-padding wizard-first-step">
-    <div class="full-width wz-step-height padding-bottom-md solutionpack-wizard-modal-body">
-      <div class="full-height overflow-auto">
-        <div class="display-table fixed-table-layout full-height full-width">
-          <div class="full-height display-table-cell vertical-align-middle">
-            <div class="col-md-6 display-flex" style="justify-content: center">
-              <img class="img-responsive step-image" src="{{startInfoGraphics}}">
-            </div>
-            <div class="col-md-6 prerequisites-section padding-bottom-25 padding-left-0">
-              <div class="font-size-30 muted-80 line-height-1">Outbreak Response Framework Configuration</div>
-              <div
-                class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
-                <p class="font-Size-13 muted">
-                  <span>
-                    This wizard guides you through the initial setup required to
-                    prepare your FortiSOAR environment for Outbreak Alert Monitoring and Investigation. This involves
-                    selecting your threat detection solutions(e.g. SIEM/UEBA) for enabling outbreak alert hunt
-                    activities
-                    and setting up response strategies (e.g. patch recommendations, ticketing solution integrations
-                    etc.)
-                    for mitigation.
-                  </span>
-                </p>
+  <link rel="stylesheet" type="text/css" href="{{widgetCSS}}" />
+  <div class="modal-header">
+    <h3 class="modal-title col-md-9">Outbreak Response Framework Configuration</h3>
+  </div>
+  <wizard on-finish="close()" indicators-position="top"
+    class="cs-wizard ingestion-steps outbreak-config-steps solutionpack-wizard-steps outbreak-config-steps"
+    name="OutbreaksolutionpackWizard">
+    <wz-step wz-title="Start" wz-order="1" class="ingestion-modal-padding wizard-first-step">
+      <div class="full-width wz-step-height padding-bottom-md solutionpack-wizard-modal-body">
+        <div class="full-height overflow-auto">
+          <div class="display-table fixed-table-layout full-height full-width">
+            <div class="full-height display-table-cell vertical-align-middle">
+              <div class="col-md-6 display-flex" style="justify-content: center">
+                <img class="img-responsive step-image" src="{{startInfoGraphics}}">
               </div>
-              <button type="button" class="btn btn-primary btn-sm margin-top-xlg text-transform-none font-size-14"
-                data-ng-click="selectHuntTool()" id="solutionpack-next-btn">Let's get started<i
-                  class="fa fa-chevron-right margin-left-sm"></i></button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </wz-step>
-  <wz-step wz-title="Select Integrations" wz-order="2" class="ingestion-modal-padding">
-    <div class="full-width wz-step-height padding-bottom-md solutionpack-wizard-modal-body">
-      <div class="full-height overflow-auto">
-        <div class="display-table fixed-table-layout full-height full-width">
-          <div class="full-height display-table-cell vertical-align-middle">
-            <div class="col-md-6 display-flex" style="justify-content: center">
-              <img class="img-responsive step-image" src="{{selectThreadHuntTool}}">
-            </div>
-            <div class="col-md-6 prerequisites-section padding-bottom-25 padding-left-0">
-              <div class="form-group margin-bottom-0">
-                <div class="font-size-30 muted-80 line-height-1">Select Integrations</div>
+              <div class="col-md-6 prerequisites-section padding-bottom-25 padding-left-0">
+                <div class="font-size-30 muted-80 line-height-1">Outbreak Response Framework Configuration</div>
                 <div
                   class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
                   <p class="font-Size-13 muted">
                     <span>
-                      Select your SIEM, UEBA, or other threat hunt sources, to run the hunt as part of an
-                      outbreak response. This enables relevant workflows and configurations in the background to
-                      facilitate the hunt.<br /><br />You may select multiple threat hunt integrations.<br />
+                      This wizard guides you through the initial setup required to
+                      prepare your FortiSOAR environment for Outbreak Alert Monitoring and Investigation. This involves
+                      selecting your threat detection solutions(e.g. SIEM/UEBA) for enabling outbreak alert hunt
+                      activities
+                      and setting up response strategies (e.g. patch recommendations, ticketing solution integrations
+                      etc.)
+                      for mitigation.
                     </span>
                   </p>
-                  <div data-ng-if="!processingPicklist" class="cs-select">
-                    <ui-select name="select_threat_detection_tools" id="select_threat_detection_tools"
-                      data-ng-model="selectedEnv.huntTools" data-ng-required="true" multiple class="custom-multi-select"
-                      append-to-body="false">
-                      <ui-select-match placeholder="Select Integrations...">{{$item}}
-                      </ui-select-match>
-                      <ui-select-choices repeat="option in threatHuntTools | filter: $select.search | orderBy: 'name'"
-                        refresh-delay="200" ng-show="($select.items.length > 0) ||">
-                        <div ng-bind-html="option | highlight: $select.search"></div>
-                      </ui-select-choices>
-                    </ui-select>
+                </div>
+                <button type="button" class="btn btn-primary btn-sm margin-top-xlg text-transform-none font-size-14"
+                  data-ng-click="selectHuntTool()" id="solutionpack-next-btn">Let's get started<i
+                    class="fa fa-chevron-right margin-left-sm"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </wz-step>
+    <wz-step wz-title="Select Integrations" wz-order="2" class="ingestion-modal-padding">
+      <div class="full-width wz-step-height padding-bottom-md solutionpack-wizard-modal-body">
+        <div class="full-height overflow-auto">
+          <div class="display-table fixed-table-layout full-height full-width">
+            <div class="full-height display-table-cell vertical-align-middle">
+              <div class="col-md-6 display-flex" style="justify-content: center">
+                <img class="img-responsive step-image" src="{{selectThreadHuntTool}}">
+              </div>
+              <div class="col-md-6 prerequisites-section padding-bottom-25 padding-left-0">
+                <div class="form-group margin-bottom-0">
+                  <div class="font-size-30 muted-80 line-height-1">Select Integrations</div>
+                  <div
+                    class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
+                    <p class="font-Size-13 muted">
+                      <span>
+                        Select your SIEM, UEBA, or other threat hunt sources, to run the hunt as part of an
+                        outbreak response. This enables relevant workflows and configurations in the background to
+                        facilitate the hunt.<br /><br />You may select multiple threat hunt integrations.<br />
+                      </span>
+                    </p>
+                    <div data-ng-if="!processingPicklist" class="cs-select">
+                      <ui-select name="select_threat_detection_tools" id="select_threat_detection_tools"
+                        data-ng-model="selectedEnv.huntTools" data-ng-required="true" multiple class="custom-multi-select"
+                        append-to-body="false">
+                        <ui-select-match placeholder="Select Integrations...">{{$item}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="option in threatHuntTools | filter: $select.search | orderBy: '$value'"
+                          refresh-delay="200" ng-show="($select.items.length > 0) ||">
+                          <div ng-bind-html="option | highlight: $select.search"></div>
+                        </ui-select-choices>
+                      </ui-select>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -80,453 +81,472 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="ingestion-modal-footer">
-      <button type="button" class="btn btn-sm btn-second-primary margin-top-lg margin-left-lg"
-        id="solutionpack-configure-back-env-btn" data-ng-click="backStartPage()"><i
-          class="fa fa-chevron-left margin-right-sm"></i>Back</button>
-      <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg"
-        data-ng-click="configHuntTool()"
-        data-ng-disabled="(selectedEnv.huntTools && selectedEnv.huntTools.length === 0)"
-        id="solutionpack-configure-env-next-btn">Next<i class="fa fa-chevron-right margin-left-sm"></i>
-      </button>
-    </div>
-  </wz-step>
-  <wz-step wz-title="Configure Integrations" wz-order="3" class="ingestion-modal-padding">
-    <form name="threatHuntConfigForm">
-      <div class="full-width wz-step-height padding-bottom-md solutionpack-wizard-modal-body">
-        <div class="overflow-auto">
-          <div class="display-table fixed-table-layout full-height full-width">
-            <div class="full-height display-table-cell vertical-align-middle">
-              <div class="display-flex full-width overflow-auto solutionpack-wizard-modal-body wz-step-height">
-                <uib-tabset active="activeTab" class="margin-top-11 width-100pt">
-                  <uib-tab data-ng-repeat="huntTool in selectedEnv.huntTools track by $index" index="$index"
-                    heading="{{ huntTool }}" data-ng-click="loadActiveTab($index ,huntTool)">
-                    <div class="container full-width">
-                      <div class="col-md-6 display-flex align-items-center">
-                        <div class="full-width info-graphic-margin">
-                          <img class="img-responsive" src="{{threatHuntToolConfig}}">
+      <div class="ingestion-modal-footer">
+        <button type="button" class="btn btn-sm btn-second-primary margin-top-lg margin-left-lg"
+          id="solutionpack-configure-back-env-btn" data-ng-click="backStartPage()"><i
+            class="fa fa-chevron-left margin-right-sm"></i>Back</button>
+        <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg"
+          data-ng-click="configHuntTool()"
+          data-ng-disabled="(selectedEnv.huntTools && selectedEnv.huntTools.length === 0)"
+          id="solutionpack-configure-env-next-btn">Next<i class="fa fa-chevron-right margin-left-sm"></i>
+        </button>
+      </div>
+    </wz-step>
+    <wz-step wz-title="Configure Integrations" wz-order="3" class="ingestion-modal-padding">
+      <form name="threatHuntConfigForm">
+        <div class="full-width wz-step-height padding-bottom-md solutionpack-wizard-modal-body">
+          <div class="overflow-auto">
+            <div class="display-table fixed-table-layout full-height full-width">
+              <div class="full-height display-table-cell vertical-align-middle">
+                <div class="display-flex full-width overflow-auto solutionpack-wizard-modal-body wz-step-height">
+                  <uib-tabset active="activeTab" class="margin-top-11 width-100pt">
+                    <uib-tab data-ng-repeat="huntTool in selectedEnv.huntTools track by $index" index="$index"
+                      heading="{{ huntTool }}" data-ng-click="loadActiveTab($index ,huntTool)">
+                      <div class="container full-width">
+                        <div class="col-md-6 display-flex align-items-center">
+                          <div class="full-width info-graphic-margin">
+                            <img class="img-responsive" src="{{threatHuntToolConfig}}">
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-md-6 padding-left-0 prerequisites-section">
-                        <div class="font-size-30 line-height-1 margin-bottom-lg margin-top-18 muted-80">Configure
-                          Integrations</div>
-                        <div class="form-group">
-                          <uib-accordion>
-                            <div uib-accordion-group class="panel-default">
-                              <uib-accordion-heading>
-                                <div ng-click="toggleConnectorConfigSettings($index)"
-                                  data-ng-class="{'queue-text-active-color': toggleConnectorConfig[$index]}">
-                                  <div class="margin-right-lg pull-left"><span class="queue-card-actions">&nbsp;<i
-                                        class="fa {{ toggleConnectorConfig[$index] ? 'fa-chevron-down' : 'fa-chevron-right'}}"></i></span>
-                                  </div>
-                                  <div class="pull-left queue-card-header-text margin-right-3">
-                                    Threat Hunt Tool Configuration
-                                  </div>
-                                  <div class="clearfix"></div>
-                                </div>
-                              </uib-accordion-heading>
-                              <div class="row">
-                                <div class="col-md-12 col-sm-12">
-                                  <div class="mp-view-summary">
-                                    <div class="pull-left margin-left-sm margin-right-sm">
-                                      <div class="custom-installing-spinner-content muted-50 margin-top-12"
-                                        data-ng-if="contentDetail.status !== 'Installed'">
-                                        <div class="custom-installing-spinner-block">
-                                          <div class="custom-installing-spinner">
-                                            <i
-                                              class="icon icon-installing-loader custom-installing-icon fa fa-spin"></i>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <span data-ng-show="contentDetail.status === 'Failed'"
-                                        class="installing-failed-icon margin-top-8">
-                                        <i class="fa fa-exclamation-triangle fa-3x" aria-hidden="true"></i>
-                                      </span>
-                                      <div>
-                                        <img data-ng-if="contentDetail.iconLarge"
-                                          data-ng-src="{{contentDetail.iconLarge || contentDetail.icon_large}}"
-                                          alt="{{contentDetail.label || contentDetail.title}}" />
-                                        <i data-ng-if="!contentDetail.iconLarge"
-                                          class="mp-tile-icon {{contentDetail.type}}-tile-icon icon icon-{{contentDetail.type}}-card"></i>
-                                      </div>
+                        <div class="col-md-6 padding-left-0 prerequisites-section">
+                          <div class="font-size-30 line-height-1 margin-bottom-lg margin-top-18 muted-80">Configure
+                            Integrations</div>
+                          <div class="form-group">
+                            <uib-accordion>
+                              <div uib-accordion-group class="panel-default">
+                                <uib-accordion-heading>
+                                  <div ng-click="toggleConnectorConfigSettings($index)"
+                                    data-ng-class="{'queue-text-active-color': toggleConnectorConfig[$index]}">
+                                    <div class="margin-right-lg pull-left"><span class="queue-card-actions">&nbsp;<i
+                                          class="fa {{ toggleConnectorConfig[$index] ? 'fa-chevron-down' : 'fa-chevron-right'}}"></i></span>
                                     </div>
-                                    <div class="pull-left margin-left-md mp-contentDetail-container">
-                                      <div class="display-flex">
-                                        <div class="mp-view-title text-overflow"
-                                          title="{{contentDetail.label || contentDetail.title}}">
-                                          {{contentDetail.label || contentDetail.title}}
-                                          <span data-ng-if="contentDetail.vendor_version"
-                                            class="mp-view-properties font-normal grey-text">v{{contentDetail.vendor_version}}</span>
-                                        </div>
-                                        <span class="preview-tag-horizontal top-0"
-                                          data-ng-if="contentDetail.featuredTags !== null && contentDetail.featuredTags.length > 0"
-                                          data-ng-style="{'background-color': contentDetail.featuredTags[0].color}"><span
-                                            class="featured-tag">{{contentDetail.featuredTags[0].tag}}</span></span>
-                                      </div>
-                                      <span class="mp-view-properties">
-                                        <span class="mp-view-properties grey-text">Version</span>
-                                        <span>{{contentDetail.version}}</span><span
-                                          data-ng-if="contentDetail.buildNumber">-{{contentDetail.buildNumber}}</span>
-                                      </span>
-                                      <p class="mp-view-properties margin-bottom-xsm"><span
-                                          class="grey-text">Certified:</span>
-                                        {{contentDetail.certified ? 'Yes':'No' }}</p>
-                                      <p class="mp-view-properties margin-bottom-sm"
-                                        data-ng-show="contentDetail.publisher !== ''">
-                                        <span class="grey-text">Publisher:</span>
-                                        <span class="mp-view-properties"
-                                          data-ng-show="(contentDetail.publisher | lowercase) === 'fortinet' || (contentDetail.publisher | lowercase) === 'cybersponse'">Fortinet
-                                        </span>
-                                        <span class="mp-view-properties"
-                                          data-ng-show="(contentDetail.publisher | lowercase) !== 'fortinet' && (contentDetail.publisher | lowercase) !== 'cybersponse'">{{contentDetail.publisher}}
-                                        </span>
-                                      </p>
+                                    <div class="pull-left queue-card-header-text margin-right-3">
+                                      Threat Hunt Tool Configuration
                                     </div>
-                                    <div class="pull-right display-inline-block">
-                                      <div class="mp-view-properties margin-top-sm">
-                                        <div class="row">
-                                          <div class="pull-right margin-right-sm">
-                                            <div data-ng-show="contentDetail.infoContent.help_online"
-                                              class="display-inline-block padding-top-xs">
-                                              <a id="administration-links"
-                                                data-ng-show="contentDetail.infoContent.help_online"
-                                                href="{{contentDetail.infoContent.help_online || contentDetail.infoContent.help}}"
-                                                title="Visit for more details about this {{contentDetail.type}}"
-                                                target="_blank" rel="noopener noreferrer" class="btn btn-default">
-                                                <i class="icon icon-documentation margin-right-sm"></i>
-                                                Documentation
-                                              </a>
+                                    <div class="clearfix"></div>
+                                  </div>
+                                </uib-accordion-heading>
+                                <div class="row">
+                                  <div class="col-md-12 col-sm-12">
+                                    <div class="mp-view-summary">
+                                      <div class="pull-left margin-left-sm margin-right-sm">
+                                        <div class="custom-installing-spinner-content muted-50 margin-top-12"
+                                          data-ng-if="contentDetail.status !== 'Installed'">
+                                          <div class="custom-installing-spinner-block">
+                                            <div class="custom-installing-spinner">
+                                              <i
+                                                class="icon icon-installing-loader custom-installing-icon fa fa-spin"></i>
                                             </div>
                                           </div>
-                                          <div class="clearfix"></div>
+                                        </div>
+                                        <span data-ng-show="contentDetail.status === 'Failed'"
+                                          class="installing-failed-icon margin-top-8">
+                                          <i class="fa fa-exclamation-triangle fa-3x" aria-hidden="true"></i>
+                                        </span>
+                                        <div>
+                                          <img data-ng-if="contentDetail.iconLarge"
+                                            data-ng-src="{{contentDetail.iconLarge || contentDetail.icon_large}}"
+                                            alt="{{contentDetail.label || contentDetail.title}}" />
+                                          <i data-ng-if="!contentDetail.iconLarge"
+                                            class="mp-tile-icon {{contentDetail.type}}-tile-icon icon icon-{{contentDetail.type}}-card"></i>
+                                        </div>
+                                      </div>
+                                      <div class="pull-left margin-left-md mp-contentDetail-container">
+                                        <div class="display-flex">
+                                          <div class="mp-view-title text-overflow"
+                                            title="{{contentDetail.label || contentDetail.title}}">
+                                            {{contentDetail.label || contentDetail.title}}
+                                            <span data-ng-if="contentDetail.vendor_version"
+                                              class="mp-view-properties font-normal grey-text">v{{contentDetail.vendor_version}}</span>
+                                          </div>
+                                          <span class="preview-tag-horizontal top-0"
+                                            data-ng-if="contentDetail.featuredTags !== null && contentDetail.featuredTags.length > 0"
+                                            data-ng-style="{'background-color': contentDetail.featuredTags[0].color}"><span
+                                              class="featured-tag">{{contentDetail.featuredTags[0].tag}}</span></span>
+                                        </div>
+                                        <span class="mp-view-properties">
+                                          <span class="mp-view-properties grey-text">Version</span>
+                                          <span>{{contentDetail.version}}</span><span
+                                            data-ng-if="contentDetail.buildNumber">-{{contentDetail.buildNumber}}</span>
+                                        </span>
+                                        <p class="mp-view-properties margin-bottom-xsm"><span
+                                            class="grey-text">Certified:</span>
+                                          {{contentDetail.certified ? 'Yes':'No' }}</p>
+                                        <p class="mp-view-properties margin-bottom-sm"
+                                          data-ng-show="contentDetail.publisher !== ''">
+                                          <span class="grey-text">Publisher:</span>
+                                          <span class="mp-view-properties"
+                                            data-ng-show="(contentDetail.publisher | lowercase) === 'fortinet' || (contentDetail.publisher | lowercase) === 'cybersponse'">Fortinet
+                                          </span>
+                                          <span class="mp-view-properties"
+                                            data-ng-show="(contentDetail.publisher | lowercase) !== 'fortinet' && (contentDetail.publisher | lowercase) !== 'cybersponse'">{{contentDetail.publisher}}
+                                          </span>
+                                        </p>
+                                      </div>
+                                      <div class="pull-right display-inline-block">
+                                        <div class="mp-view-properties margin-top-sm">
+                                          <div class="row">
+                                            <div class="pull-right margin-right-sm">
+                                              <div data-ng-show="contentDetail.infoContent.help_online"
+                                                class="display-inline-block padding-top-xs">
+                                                <a id="administration-links"
+                                                  data-ng-show="contentDetail.infoContent.help_online"
+                                                  href="{{contentDetail.infoContent.help_online || contentDetail.infoContent.help}}"
+                                                  title="Visit for more details about this {{contentDetail.type}}"
+                                                  target="_blank" rel="noopener noreferrer" class="btn btn-default">
+                                                  <i class="icon icon-documentation margin-right-sm"></i>
+                                                  Documentation
+                                                </a>
+                                              </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
+                                    <div class="clearfix"></div>
                                   </div>
-                                  <div class="clearfix"></div>
+                                </div>
+                                <hr class="margin-0">
+                                <div ng-form="formHolder.connectorForm" name="formHolder.connectorForm">
+                                  <div data-ng-if="selectedConnector"
+                                    class="margin-top-negative-20 margin-top-md padding-left-0 padding-right-0 connector-config-width"
+                                    data-ng-include="'app/settings/connectorConfig.html'">
+                                  </div>
+                                  <div data-ng-show="selectedConnector" class="col-md-12 margin-top-18">
+                                    <button type="button" class="btn btn-primary"
+                                      data-ng-disabled="!(formHolder.connectorForm.$valid && formHolder.connectorForm.$dirty)"
+                                      data-ng-click="saveConnector()" id="submit-github-config-add-btn"><i
+                                        class="icon icon-check margin-right-sm"></i>Save</button>
+                                    <button type="button" class="btn btn-default" data-ng-disabled="processing"
+                                      data-ng-click="closeConfiguration()" id="cancel-github-config-add-btn"><i
+                                        class="icon icon-close margin-right-sm"></i>Cancel</button>
+                                  </div>
                                 </div>
                               </div>
-                              <hr class="margin-0">
-                              <div ng-form="formHolder.connectorForm" name="formHolder.connectorForm">
-                                <div data-ng-if="selectedConnector"
-                                  class="margin-top-negative-20 margin-top-md padding-left-0 padding-right-0 connector-config-width"
-                                  data-ng-include="'app/settings/connectorConfig.html'">
+                            </uib-accordion>
+                          </div>
+                          <div class="form-group">
+                            <uib-accordion>
+                              <div uib-accordion-group class="panel-default" is-open="true">
+                                <uib-accordion-heading>
+                                  <div ng-click="toggleAdvancedSettings($index)"
+                                    data-ng-class="{'queue-text-active-color': toggle[$index]}">
+                                    <div class="margin-right-lg pull-left"><span class="queue-card-actions">&nbsp;<i
+                                          class="fa {{ toggle[$index] ? 'fa-chevron-down' : 'fa-chevron-right'}}"></i></span>
+                                    </div>
+                                    <div class="pull-left queue-card-header-text margin-right-3">
+                                      Threat Hunt Tool Parameters
+                                    </div>
+                                    <div class="clearfix"></div>
+                                  </div>
+                                </uib-accordion-heading>
+                                <div data-ng-if="huntTool==='Fortinet FortiAnalyzer'" class="form-group margin-top-sm">
+                                  <p class="font-Size-13 muted">
+                                    <span>
+                                      Specify the administrative domain (ADOM) name of the Fortinet FortiAnalyzer server
+                                      based on which to search for logs in Fortinet FortiAnalyzer
+                                    </span>
+                                  </p>
+                                  <div ng-form="fazForm" name="fazForm">
+                                    <cs-connector-field-renderer data-cs-form="fazForm"
+                                      data-json-fields="threatHuntToolsParams.fazParams"
+                                      data-params="selectedEnv.threatHuntToolsParams.fazParams"
+                                      data-enable-record-fields="false" data-enable-jinja="false">
+                                    </cs-connector-field-renderer>
+                                  </div>
                                 </div>
-                                <!-- formholder: {{ formHolder }} -->
-                                <div data-ng-show="selectedConnector" class="col-md-12 margin-top-18">
-                                  <button type="button" class="btn btn-primary"
-                                    data-ng-disabled="!(formHolder.connectorForm.$valid && formHolder.connectorForm.$dirty)"
-                                    data-ng-click="saveConnector()" id="submit-github-config-add-btn"><i
-                                      class="icon icon-check margin-right-sm"></i>Save</button>
-                                  <button type="button" class="btn btn-default" data-ng-disabled="processing"
-                                    data-ng-click="closeConfiguration()" id="cancel-github-config-add-btn"><i
-                                      class="icon icon-close margin-right-sm"></i>Cancel</button>
+                                <div data-ng-if="huntTool==='Fortinet FortiSIEM'" class="form-group margin-top-sm">
+                                  <p class="font-Size-13 muted">
+                                    <span>
+                                      Provide the maximum number of events and incident that the Fortinet FortiSIEM will
+                                      return as a response
+                                    </span>
+                                  </p>
+                                  <div ng-form="fsmForm" name="fsmForm">
+                                    <cs-connector-field-renderer data-cs-form="fsmForm"
+                                      data-json-fields="threatHuntToolsParams.fsmParams"
+                                      data-params="selectedEnv.threatHuntToolsParams.fsmParams"
+                                      data-enable-record-fields="false" data-enable-jinja="false">
+                                    </cs-connector-field-renderer>
+                                  </div>
+                                </div>
+                                <div data-ng-if="huntTool==='IBM QRadar'" class="form-group margin-top-sm">
+                                  <p class="font-Size-13 muted">
+                                    <span>
+                                      Provide the maximum number of events and incident that the response will return
+                                    </span>
+                                  </p>
+                                  <div ng-form="qradarForm" name="qradarForm">
+                                    <cs-connector-field-renderer data-cs-form="qradarForm"
+                                      data-json-fields="threatHuntToolsParams.qRadarParams"
+                                      data-params="selectedEnv.threatHuntToolsParams.qRadarParams"
+                                      data-enable-record-fields="false" data-enable-jinja="false">
+                                    </cs-connector-field-renderer>
+                                  </div>
+                                </div>
+                                <div data-ng-if="huntTool==='Splunk'" class="form-group margin-top-sm">
+                                  <p class="font-Size-13 muted">
+                                    <span>
+                                      Provide the maximum number of events and incident that the response will return
+                                    </span>
+                                  </p>
+                                  <div ng-form="splunkForm" name="splunkForm">
+                                    <cs-connector-field-renderer data-cs-form="splunkForm"
+                                      data-json-fields="threatHuntToolsParams.splunkParams"
+                                      data-params="selectedEnv.threatHuntToolsParams.splunkParams"
+                                      data-enable-record-fields="false" data-enable-jinja="false">
+                                    </cs-connector-field-renderer>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </uib-accordion>
+                            </uib-accordion>
+                          </div>
                         </div>
-                        <!-- <form name="threatHuntConfigForm"> -->
+                      </div>
+                    </uib-tab>
+                  </uib-tabset>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ingestion-modal-footer">
+          <button type="button" class="btn btn-sm btn-second-primary margin-top-lg margin-left-lg"
+            id="solutionpack-configure-back-env-btn" data-ng-click="backSelectHuntTools()"><i
+              class="fa fa-chevron-left margin-right-sm"></i>Back</button>
+          <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg"
+            data-ng-click="nextNotification(threatHuntConfigForm)" id="solutionpack-configure-env-next-btn">Next<i
+              class="fa fa-chevron-right margin-left-sm"></i>
+          </button>
+        </div>
+      </form>
+    </wz-step>
+    <wz-step wz-title="Investigation Schedule" wz-order="4" class="ingestion-modal-padding">
+      <form name="scheduleForm">
+        <div class="full-width wz-step-height padding-bottom-md solutionpack-wizard-modal-body">
+          <div class="full-height overflow-auto">
+            <div class="display-table fixed-table-layout full-height full-width">
+              <div class="full-height display-table-cell vertical-align-middle">
+                <div class="col-md-6 display-flex" style="justify-content: center">
+                  <img class="img-responsive step-image" src="{{threatTuntSchedule}}">
+                </div>
+                <div class="col-md-6 prerequisites-section padding-bottom-25 padding-left-0">
+                  <div class="form-group margin-bottom-0">
+                    <div class="font-size-30 muted-80 line-height-1">Investigation Schedule</div>
+                    <div ng-form="threatHuntWindowForm" name="threatHuntWindowForm">
+                      <div
+                        class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
                         <div class="form-group">
-                          <uib-accordion>
-                            <div uib-accordion-group class="panel-default" is-open="true">
-                              <uib-accordion-heading>
-                                <div ng-click="toggleAdvancedSettings($index)"
-                                  data-ng-class="{'queue-text-active-color': toggle[$index]}">
-                                  <div class="margin-right-lg pull-left"><span class="queue-card-actions">&nbsp;<i
-                                        class="fa {{ toggle[$index] ? 'fa-chevron-down' : 'fa-chevron-right'}}"></i></span>
-                                  </div>
-                                  <div class="pull-left queue-card-header-text margin-right-3">
-                                    Threat Hunt Tool Parameters
-                                  </div>
-                                  <div class="clearfix"></div>
-                                </div>
-                              </uib-accordion-heading>
-                              <!-- <div ng-form="fazForm" name="fazForm"> -->
-                              <div data-ng-if="huntTool==='Fortinet FortiAnalyzer'" class="form-group margin-top-sm">
-                                <p class="font-Size-13 muted">
-                                  <span>
-                                    Specify the administrative domain (ADOM) name of the Fortinet FortiAnalyzer server
-                                    based on which to search for logs in Fortinet FortiAnalyzer
-                                  </span>
-                                </p>
-                                <div ng-form="fazForm" name="fazForm">
-                                  <cs-connector-field-renderer data-cs-form="fazForm"
-                                    data-json-fields="threatHuntToolsParams.fazParams"
-                                    data-params="selectedEnv.threatHuntToolsParams.fazParams"
-                                    data-enable-record-fields="false" data-enable-jinja="false">
-                                  </cs-connector-field-renderer>
-                                </div>
-                              </div>
-                              <div data-ng-if="huntTool==='Fortinet FortiSIEM'" class="form-group margin-top-sm">
-                                <p class="font-Size-13 muted">
-                                  <span>
-                                    Provide the maximum number of events and incident that the Fortinet FortiSIEM will
-                                    return as a response
-                                  </span>
-                                </p>
-                                <div ng-form="fsmForm" name="fsmForm">
-                                  <cs-connector-field-renderer data-cs-form="fsmForm"
-                                    data-json-fields="threatHuntToolsParams.fsmParams"
-                                    data-params="selectedEnv.threatHuntToolsParams.fsmParams"
-                                    data-enable-record-fields="false" data-enable-jinja="false">
-                                  </cs-connector-field-renderer>
-                                </div>
-                              </div>
-                              <div data-ng-if="huntTool==='IBM QRadar'" class="form-group margin-top-sm">
-                                <p class="font-Size-13 muted">
-                                  <span>
-                                    Provide the maximum number of events and incident that the response will return
-                                  </span>
-                                </p>
-                                <div ng-form="qradarForm" name="qradarForm">
-                                  <cs-connector-field-renderer data-cs-form="qradarForm"
-                                    data-json-fields="threatHuntToolsParams.qRadarParams"
-                                    data-params="selectedEnv.threatHuntToolsParams.qRadarParams"
-                                    data-enable-record-fields="false" data-enable-jinja="false">
-                                  </cs-connector-field-renderer>
-                                </div>
-                              </div>
-                              <div data-ng-if="huntTool==='Splunk'" class="form-group margin-top-sm">
-                                <p class="font-Size-13 muted">
-                                  <span>
-                                    Provide the maximum number of events and incident that the response will return
-                                  </span>
-                                </p>
-                                <div ng-form="splunkForm" name="splunkForm">
-                                  <cs-connector-field-renderer data-cs-form="splunkForm"
-                                    data-json-fields="threatHuntToolsParams.splunkParams"
-                                    data-params="selectedEnv.threatHuntToolsParams.splunkParams"
-                                    data-enable-record-fields="false" data-enable-jinja="false">
-                                  </cs-connector-field-renderer>
-                                </div>
-                              </div>
+                          <div class="font-size-18 muted-80 line-height-1">Threat Hunt Window</div><br />
+                          <p class="font-Size-13 muted">
+                            <span>
+                              Specify the duration within which to include the outbreak alerts for investigation. <br />
+                            </span>
+                          </p>
+                          <div class="align-items-center control-label display-inline-flex margin-top-8 padding-left-md">
+                            Include outbreak alerts from the last &nbsp;
+                            <input type="number" class="padding-left-sm padding-right-sm width-100px form-control"
+                              id="timeFrameDays" name="timeFrameDays" data-ng-init="selectedEnv.timeFrameDays = 30"
+                              data-ng-model="selectedEnv.timeFrameDays" min="1" data-ng-pattern="onlyNumbers"
+                              autocomplete="off" data-ng-required="true" />&nbsp; Days<span
+                              class="required text-danger">*</span>
+                          </div>
+                          <div class="margin-left-25">
+                            <div data-ng-show="scheduleForm.threatHuntWindowForm.timeFrameDays.$error.pattern"
+                              class="font-size-12 margin-left-120 ng-hide padding-left-120 text-danger">Number should be
+                              greater than 0</div>
+                            <div data-ng-show="scheduleForm.threatHuntWindowForm.timeFrameDays.$error.required"
+                              class="font-size-12 margin-left-120 ng-hide padding-left-120 text-danger">Field is required
                             </div>
-                          </uib-accordion>
+                          </div>
+                          <div class="clearfix"></div>
                         </div>
                       </div>
                     </div>
-                  </uib-tab>
-                </uib-tabset>
+                    <div
+                      class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
+                      <div class="font-size-18 muted-80 line-height-1">Investigation Frquency</div><br />
+                      <p class="font-Size-13 muted">
+                        <span>
+                          Select the frequency of the investigation to create a schedule that periodically runs the
+                          investigation on the outbreak alerts under Automation > Schedules<br />
+                        </span>
+                      </p>
+                      <div class="margin-left-md" data-schedule-playbook></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ingestion-modal-footer">
+          <button type="button" class="btn btn-sm btn-second-primary margin-top-lg margin-left-lg"
+            id="solutionpack-configure-back-env-btn" data-ng-click="backThreatHuntConfig()"><i
+              class="fa fa-chevron-left margin-right-sm"></i>Back</button>
+          <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg"
+            data-ng-click="threatHuntSchedule(scheduleForm)"
+            data-ng-disabled="(selectedEnv.huntTools && selectedEnv.huntTools.length === 0) || (scheduleStatus=== undefined)"
+            id="solutionpack-configure-env-next-btn">Next<i class="fa fa-chevron-right margin-left-sm"></i>
+          </button>
+        </div>
+      </form>
+    </wz-step>
+    <wz-step wz-title="Installation & Notification" wz-order="5" class="ingestion-modal-padding">
+      <form name="installationForm">
+        <div class="full-width wz-step-height padding-bottom-md solutionpack-wizard-modal-body">
+          <div class="full-height overflow-auto">
+            <div class="display-table fixed-table-layout full-height full-width">
+              <div class="full-height display-table-cell vertical-align-middle">
+                <div class="col-md-6 display-flex" style="justify-content: center">
+                  <img class="img-responsive step-image" src="{{outbreakSettings}}">
+                </div>
+                <div class="col-md-6 prerequisites-section padding-bottom-25 padding-left-0">
+                  <div class="form-group margin-bottom-0">
+                    <div class="font-size-30 muted-80 line-height-1">Installation & Notification</div>
+                    <div
+                      class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
+                      <div class="font-size-18 muted-80 line-height-1">Auto Install Outbreak Alert Solution Pack</div>
+                      <br />
+                      <div class="checkbox">
+                        <label for="resetAuditLogs">
+                          <input id="autoInstall" type="checkbox" name="autoInstall" data-ng-model="autoInstall.enabled"
+                            data-cs-focus>&nbsp;Enable Auto Install
+                        </label>
+                      </div>
+                      <div data-ng-hide="!autoInstall.enabled">
+                        <div class="mertics-widget-border-bottom margin-bottom-lg"></div>
+                        <div class="control-label display-block"><i class="margin-right-sm icon icon-settings-01"></i>Auto
+                          Install Criteria
+                          <span class="required text-danger">*</span>
+                        </div>
+                        <div class="margin-bottom-lg padding-bottom-25">
+                          <small class="control-label margin-top-8 margin-right-md pull-left">A once new/update outbreak
+                            alert will available it will automatically install
+                          </small>
+                        </div>
+                        <div class="cs-select">
+                          <ui-select name="select_outbreak_type" id="select_outbreak_type"
+                            data-ng-model="selectedEnv.installOutbreakType" data-ng-required="true" multiple
+                            class="custom-multi-select" append-to-body="false">
+                            <ui-select-match placeholder="Select Severity...">{{$item}}
+                            </ui-select-match>
+                            <ui-select-choices
+                              repeat="option in severityValues | filter: $select.search | orderBy: 'item'"
+                              refresh-delay="200" ng-show="($select.items.length > 0) ||">
+                              <div ng-bind-html="option | highlight: $select.search"></div>
+                            </ui-select-choices>
+                          </ui-select>
+                        </div>
+                      </div>
+                    </div>
+  
+                    <div ng-form="notificationForm" name="notificationForm">
+                      <div
+                        class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
+                        <div class="font-size-18 muted-80 line-height-1">Outbreak Alert Update Notification</div><br />
+                        <p class="font-Size-13 muted">
+                          <span>
+                            Specify a list of email IDs separated by semicolons to receive outbreak alert updates
+                          </span>
+                        </p>
+                        <div class="form-group"
+                          data-ng-class="{'has-error': installationForm.notificationForm.fromEmailAddressa.$touched && installationForm.notificationForm.fromEmailAddressa.$invalid }">
+                          <label for="fromEmailAddressa" class="control-label">Email Address <span
+                              data-uib-tooltip="Enter a semi-colon separated list of email IDs to whom you want to send updates of outbreak alerts"
+                              data-tooltip-append-to-body="true" class="text-danger"><i
+                                class="icon icon-information"></i>*</span></label>
+                          <input id="fromEmailAddressa" type="text" class="form-control input-sm" name="fromEmailAddressa"
+                            data-ng-model="selectedEnv.emailAddress" required>
+                          <div
+                            data-ng-show="installationForm.notificationForm.fromEmailAddressa.$touched && installationForm.notificationForm.fromEmailAddressa.$error.required">
+                            <span class="text-danger">This field is required.</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ingestion-modal-footer">
+          <button type="button" class="btn btn-sm btn-second-primary margin-top-lg margin-left-lg"
+            id="solutionpack-configure-back-env-btn" data-ng-click="backNotification()"><i
+              class="fa fa-chevron-left margin-right-sm"></i>Back</button>
+          <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg"
+            data-ng-click="moveToFinish(installationForm)"
+            data-ng-disabled="(selectedEnv.installOutbreakType && selectedEnv.installOutbreakType.length === 0)"
+            id="solutionpack-configure-env-next-btn">Next<i class="fa fa-chevron-right margin-left-sm"></i>
+          </button>
+        </div>
+      </form>
+    </wz-step>
+    <wz-step wz-title="Finish" wz-order="6" class="ingestion-modal-padding wizard-first-step">
+      <div class="full-width wz-step-height padding-bottom-md solutionpack-wizard-modal-body">
+        <div class="full-height overflow-auto">
+          <div class="display-table fixed-table-layout full-height full-width">
+            <div class="full-height display-table-cell vertical-align-middle">
+              <div class="col-md-6 display-flex" style="justify-content: center">
+                <img class="img-responsive" src="{{finishInfoGraphics}}">
+              </div>
+              <div class="col-md-6 prerequisites-section padding-bottom-25 padding-left-0">
+                <div class="font-size-30 muted-80 line-height-1">You are all set!</div><br />
+                <div
+                  class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
+                  <div class="data-ingestion-summary padding-top-lg muted">
+                    <h6 class="font-weight-normal margin-bottom-sm modal-title text-transform-none">Quick Summary</h6>
+                    <p><i class="completed icon icon-approval margin-right-md"></i>Selected threat hunt
+                      integrations is {{selectedEnv.huntTools.join(', ')}}</p>
+                    <p><i class="completed icon icon-approval margin-right-md"></i>Threat hunt
+                      parameters set for {{selectedEnv.huntTools.join(', ')}}</p>
+                    <p><i class="completed icon icon-approval margin-right-md"></i>Threat hunt
+                      investigation window set to {{selectedEnv.timeFrameDays}} days</p>
+                    <p><i class="completed icon icon-approval margin-right-md"></i>Threat hunt
+                      investigation frequency set {{selectedEnv.scheduleFrequency}}</p>
+                    <p><i class="completed icon icon-approval margin-right-md"></i>Auto install outbreak alert
+                      solution packs for outbreak alert categorized as {{selectedEnv.installOutbreakType.join(', ')}}
+                      severity</p>
+                    <p><i class="completed icon icon-approval margin-right-md"></i>Outbreak alert update notifications
+                      are set for Email ID's {{selectedEnv.emailAddress}}</p>
+                  </div>
+                </div>
+                <div
+                  class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
+                  <div class="align-items-center control-label display-inline-flex margin-top-8 padding-left-md">
+                    To trigger the investigation outbreak alert click to &nbsp;
+                    <button id="run-schedule" type="button" class="btn btn-second-primary btn-sm muted"
+                      data-ng-click="triggerSchedule()" data-ng-disabled="scheduleID===undefined"
+                      title="Trigger Schedule Now"><i class="icon icon-trigger margin-right-sm"></i>Run Investigation
+                      Now</button> &nbsp;button
+                  </div>
+                </div>
+                <div
+                  class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
+                  <p class="font-size-13 margin-bottom-0 muted">All prerequisites have been configured successfully.</p>
+                  <br />
+                  <p class="font-size-13 margin-bottom-0 muted">You can now install the available specific outbreak alert
+                    solution packs, for monitoring and investigating various outbreaks reported.</p>
+                  <p class="font-size-13 margin-bottom-0 muted">You may now navigate to the <a
+                      data-ng-click="close()">'Outbreak Management'</a> in
+                    the navigation to start using this solution.</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      </div>
       <div class="ingestion-modal-footer">
         <button type="button" class="btn btn-sm btn-second-primary margin-top-lg margin-left-lg"
-          id="solutionpack-configure-back-env-btn" data-ng-click="backSelectHuntTools()"><i
+          id="solutionpack-configure-back-btn" data-ng-click="backThreatHuntSchedule()"><i
             class="fa fa-chevron-left margin-right-sm"></i>Back</button>
         <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg"
-          data-ng-click="nextNotification(threatHuntConfigForm)" id="solutionpack-configure-env-next-btn">Next<i
+          data-ng-click="close()" id="solutionpack-configure-finish-btn">Finish<i
             class="fa fa-chevron-right margin-left-sm"></i>
         </button>
       </div>
-    </form>
-  </wz-step>
-  <wz-step wz-title="Investigation Schedule" wz-order="4" class="ingestion-modal-padding">
-    <form name="scheduleForm">
-      <div class="full-width wz-step-height padding-bottom-md solutionpack-wizard-modal-body">
-        <div class="full-height overflow-auto">
-          <div class="display-table fixed-table-layout full-height full-width">
-            <div class="full-height display-table-cell vertical-align-middle">
-              <div class="col-md-6 display-flex" style="justify-content: center">
-                <img class="img-responsive step-image" src="{{threatTuntSchedule}}">
-              </div>
-              <div class="col-md-6 prerequisites-section padding-bottom-25 padding-left-0">
-                <div class="form-group margin-bottom-0">
-                  <div class="font-size-30 muted-80 line-height-1">Investigation Schedule</div>
-                  <div ng-form="threatHuntWindowForm" name="threatHuntWindowForm">
-                    <div
-                      class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
-                      <div class="form-group">
-                        <div class="font-size-18 muted-80 line-height-1">Threat Hunt Window</div><br />
-                        <p class="font-Size-13 muted">
-                          <span>
-                            Specify the duration within which to include the outbreak alerts for investigation. <br />
-                          </span>
-                        </p>
-                        <div class="align-items-center control-label display-inline-flex margin-top-8 padding-left-md">
-                          Include outbreak alerts from the last &nbsp;
-                          <input type="number" class="padding-left-sm padding-right-sm width-100px form-control"
-                            id="timeFrameDays" name="timeFrameDays" data-ng-init="selectedEnv.timeFrameDays = 30"
-                            data-ng-model="selectedEnv.timeFrameDays" min="1" data-ng-pattern="onlyNumbers"
-                            autocomplete="off" data-ng-required="true" />&nbsp; Days<span
-                            class="required text-danger">*</span>
-                        </div>
-                        <div class="margin-left-25">
-                          <div data-ng-show="scheduleForm.threatHuntWindowForm.timeFrameDays.$error.pattern"
-                            class="font-size-12 margin-left-120 ng-hide padding-left-120 text-danger">Number should be
-                            greater than 0</div>
-                          <div data-ng-show="scheduleForm.threatHuntWindowForm.timeFrameDays.$error.required"
-                            class="font-size-12 margin-left-120 ng-hide padding-left-120 text-danger">Field is required
-                          </div>
-                        </div>
-                        <div class="clearfix"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
-                    <div class="font-size-18 muted-80 line-height-1">Investigation Frquency</div><br />
-                    <p class="font-Size-13 muted">
-                      <span>
-                        Select the frequency of the investigation to create a schedule that periodically runs the
-                        investigation on the outbreak alerts under Automation > Schedules<br />
-                      </span>
-                    </p>
-                    <div class="margin-left-md" data-schedule-playbook></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="ingestion-modal-footer">
-        <button type="button" class="btn btn-sm btn-second-primary margin-top-lg margin-left-lg"
-          id="solutionpack-configure-back-env-btn" data-ng-click="backThreatHuntConfig()"><i
-            class="fa fa-chevron-left margin-right-sm"></i>Back</button>
-        <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg"
-          data-ng-click="threatHuntSchedule(scheduleForm)"
-          data-ng-disabled="(selectedEnv.huntTools && selectedEnv.huntTools.length === 0) || (scheduleStatus=== undefined)"
-          id="solutionpack-configure-env-next-btn">Next<i class="fa fa-chevron-right margin-left-sm"></i>
-        </button>
-      </div>
-    </form>
-  </wz-step>
-  <wz-step wz-title="Installation & Notification" wz-order="5" class="ingestion-modal-padding">
-    <form name="installationForm">
-      <div class="full-width wz-step-height padding-bottom-md solutionpack-wizard-modal-body">
-        <div class="full-height overflow-auto">
-          <div class="display-table fixed-table-layout full-height full-width">
-            <div class="full-height display-table-cell vertical-align-middle">
-              <div class="col-md-6 display-flex" style="justify-content: center">
-                <img class="img-responsive step-image" src="{{outbreakSettings}}">
-              </div>
-              <div class="col-md-6 prerequisites-section padding-bottom-25 padding-left-0">
-                <div class="form-group margin-bottom-0">
-                  <div class="font-size-30 muted-80 line-height-1">Installation & Schedule</div>
-                  <div
-                    class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
-                    <div class="font-size-18 muted-80 line-height-1">Auto Install Outbreak Alert Solution Pack</div>
-                    <br />
-                    <div class="checkbox">
-                      <label for="resetAuditLogs">
-                        <input id="autoInstall" type="checkbox" name="autoInstall" data-ng-model="autoInstall.enabled"
-                          data-cs-focus>&nbsp;Enable Auto Install
-                      </label>
-                    </div>
-                    <div data-ng-hide="!autoInstall.enabled">
-                      <div class="mertics-widget-border-bottom margin-bottom-lg"></div>
-                      <div class="control-label display-block"><i class="margin-right-sm icon icon-settings-01"></i>Auto
-                        Install Criteria
-                        <span class="required text-danger">*</span>
-                      </div>
-                      <div class="margin-bottom-lg padding-bottom-25">
-                        <small class="control-label margin-top-8 margin-right-md pull-left">A once new/update outbreak
-                          alert will available it will automatically install
-                        </small>
-                      </div>
-                      <div class="cs-select">
-                        <ui-select name="select_outbreak_type" id="select_outbreak_type"
-                          data-ng-model="selectedEnv.installOutbreakType" data-ng-required="true" multiple
-                          class="custom-multi-select" append-to-body="false">
-                          <ui-select-match placeholder="Select Severity...">{{$item}}
-                          </ui-select-match>
-                          <ui-select-choices
-                            repeat="option in severityValues | filter: $select.search | orderBy: 'item'"
-                            refresh-delay="200" ng-show="($select.items.length > 0) ||">
-                            <div ng-bind-html="option | highlight: $select.search"></div>
-                          </ui-select-choices>
-                        </ui-select>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div ng-form="notificationForm" name="notificationForm">
-                    <div
-                      class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
-                      <div class="font-size-18 muted-80 line-height-1">Outbreak Alert Update Notification</div><br />
-                      <p class="font-Size-13 muted">
-                        <span>
-                          Specify a list of email IDs separated by semicolons to receive outbreak alert updates
-                        </span>
-                      </p>
-                      <div class="form-group"
-                        data-ng-class="{'has-error': installationForm.notificationForm.fromEmailAddressa.$touched && installationForm.notificationForm.fromEmailAddressa.$invalid }">
-                        <label for="fromEmailAddressa" class="control-label">Email Address <span
-                            data-uib-tooltip="Enter a semi-colon separated list of email IDs to whom you want to send updates of outbreak alerts"
-                            data-tooltip-append-to-body="true" class="text-danger"><i
-                              class="icon icon-information"></i>*</span></label>
-                        <input id="fromEmailAddressa" type="text" class="form-control input-sm" name="fromEmailAddressa"
-                          data-ng-model="selectedEnv.emailAddress" required>
-                        <div
-                          data-ng-show="installationForm.notificationForm.fromEmailAddressa.$touched && installationForm.notificationForm.fromEmailAddressa.$error.required">
-                          <span class="text-danger">This field is required.</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="ingestion-modal-footer">
-        <button type="button" class="btn btn-sm btn-second-primary margin-top-lg margin-left-lg"
-          id="solutionpack-configure-back-env-btn" data-ng-click="backNotification()"><i
-            class="fa fa-chevron-left margin-right-sm"></i>Back</button>
-        <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg"
-          data-ng-click="moveToFinish(installationForm)"
-          data-ng-disabled="(selectedEnv.installOutbreakType && selectedEnv.installOutbreakType.length === 0)"
-          id="solutionpack-configure-env-next-btn">Next<i class="fa fa-chevron-right margin-left-sm"></i>
-        </button>
-      </div>
-    </form>
-  </wz-step>
-  <wz-step wz-title="Finish" wz-order="6" class="ingestion-modal-padding wizard-first-step">
-    <div class="full-width wz-step-height padding-bottom-md solutionpack-wizard-modal-body">
-      <div class="full-height overflow-auto">
-        <div class="display-table fixed-table-layout full-height full-width">
-          <div class="full-height display-table-cell vertical-align-middle">
-            <div class="col-md-6 display-flex" style="justify-content: center">
-              <img class="img-responsive" src="{{finishInfoGraphics}}">
-            </div>
-            <div class="col-md-6 prerequisites-section padding-bottom-25 padding-left-0">
-              <div class="font-size-30 muted-80 line-height-1">You are all set!</div><br />
-              <div
-                class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
-                <p class="font-size-13 margin-bottom-0 muted">All prerequisites have been configured successfully.</p>
-                <br />
-                <p class="font-size-13 margin-bottom-0 muted">You can now install the available specific outbreak alert
-                  solution packs, for monitoring and investigating various outbreaks reported.</p>
-                <p class="font-size-13 margin-bottom-0 muted">You may now navigate to the 'Outbreak Management' tab in
-                  the
-                  navigation and start using the solution.</p>
-              </div>
-              <div>
-                <button id="run-schedule" type="button" class="btn btn-second-primary btn-sm"
-                  data-ng-click="triggerSchedule()" data-ng-disabled="scheduleID===undefined"
-                  title="Trigger Schedule Now"><i class="icon icon-trigger margin-right-sm"></i>Run Schedule
-                  Now</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
-    <div class="ingestion-modal-footer">
-      <button type="button" class="btn btn-sm btn-second-primary margin-top-lg margin-left-lg"
-        id="solutionpack-configure-back-btn" data-ng-click="backThreatHuntSchedule()"><i
-          class="fa fa-chevron-left margin-right-sm"></i>Back</button>
-      <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg"
-        data-ng-click="close()" id="solutionpack-configure-finish-btn">Finish<i
-          class="fa fa-chevron-right margin-left-sm"></i>
-      </button>
-    </div>
-  </wz-step>
-</wizard>
+    </wz-step>
+  </wizard>

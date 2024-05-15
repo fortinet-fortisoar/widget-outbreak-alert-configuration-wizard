@@ -37,6 +37,7 @@
       scope.hidePlaybook = false;
       scope.scheduleConfig = {
         name: 'Investigate_Outbreak-Alerts',
+        id: null,
         crontab: {
           minute: '01',
           hour: '0',
@@ -73,7 +74,7 @@
 
       scope.$watch('scheduleConfig.kwargs.wf', function (newVal, oldVal) {
         if (newVal && (oldVal && typeof oldVal === 'object')) {
-          $scope.scheduleForm.$setDirty();
+          scope.scheduleForm.$setDirty();
         }
       });
 
@@ -87,32 +88,40 @@
       }
 
       function loadScheduleData() {
-        if (scope.scheduleConfig.id) {
-          scope.processingScheduleData = true;
-          SchedulesService.loadScheduleDetails(scope.scheduleConfig.id).then(function (result) {
-            scope.scheduleConfig = result;
-            scope.scheduleConfig.kwargs = scope.scheduleConfig.kwargs || {};
-            if (scope.scheduleConfig.kwargs.wf_iri) {
-              var playbookId = '';
-              if (scope.scheduleConfig.kwargs.wf_iri.indexOf(API.WORKFLOWS) > 0) {
-                playbookId = $filter('getEndPathName')(scope.scheduleConfig.kwargs.wf_iri);
-              } else {
-                playbookId = scope.scheduleConfig.kwargs.wf_iri;
+        $http({
+          method: 'GET',
+          url: API.WORKFLOW + 'api/scheduled/?format=json&name=Investigate_Outbreak-Alerts'
+        }).then(function (response) {
+          if (response.data['hydra:member'] && response.data['hydra:member'].length > 0) {
+            scope.scheduleConfig.id = response.data['hydra:member'][0].id;
+            scope.$emit('scheduleDetails', { 'status': true, 'scheduleId': scope.scheduleConfig.id, 'scheduleFrequency': scope.cronDescriber });
+            scope.processingScheduleData = true;
+            SchedulesService.loadScheduleDetails(scope.scheduleConfig.id).then(function (result) {
+              scope.scheduleConfig = result;
+              scope.scheduleConfig.kwargs = scope.scheduleConfig.kwargs || {};
+              if (scope.scheduleConfig.kwargs.wf_iri) {
+                var playbookId = '';
+                if (scope.scheduleConfig.kwargs.wf_iri.indexOf(API.WORKFLOWS) > 0) {
+                  playbookId = $filter('getEndPathName')(scope.scheduleConfig.kwargs.wf_iri);
+                } else {
+                  playbookId = scope.scheduleConfig.kwargs.wf_iri;
+                }
+
+                scope.scheduleConfig.kwargs.wf = API.API_3_BASE + API.WORKFLOWS + playbookId;
               }
 
-              scope.scheduleConfig.kwargs.wf = API.API_3_BASE + API.WORKFLOWS + playbookId;
-            }
+              scope.processingScheduleData = false;
+              scope.scheduleConfig.kwargs.start_time = scope.scheduleConfig.kwargs.start_time || scope.scheduleConfig.start_time;
+              scope.scheduleConfig.kwargs.expires = scope.scheduleConfig.kwargs.expires || scope.scheduleConfig.expires;
+              scope.scheduleConfig.kwargs.timezone = scope.scheduleConfig.kwargs.timezone || scope.scheduleConfig.crontab.timezone;
+              updateCron();;
+            });
 
-            scope.processingScheduleData = false;
-            scope.scheduleConfig.kwargs.start_time = scope.scheduleConfig.kwargs.start_time || scope.scheduleConfig.start_time;
-            scope.scheduleConfig.kwargs.expires = scope.scheduleConfig.kwargs.expires || scope.scheduleConfig.expires;
-            scope.scheduleConfig.kwargs.timezone = scope.scheduleConfig.kwargs.timezone || scope.scheduleConfig.crontab.timezone;
-            updateCron();;
-          });
-        }
-        else {
-          updateCron();
-        }
+          }
+          else {
+            updateCron();
+          }
+        });
       }
 
       init();
@@ -229,29 +238,32 @@
           delete scheduleData.kwargs.wf;
         }
         SchedulesService.saveSchedule(scheduleData).then(function (data) {
-          _isScheduleModified = true;
           scope.scheduleConfig.id = data.id;
-          scope.scheduleForm.$setPristine();
           scope.status = true;
-          scope.$emit('scheduleDetails', { 'status': scope.status, 'scheduleId': scope.scheduleConfig.id });
+          scope.$emit('scheduleDetails', { 'status': scope.status, 'scheduleId': scope.scheduleConfig.id, 'scheduleFrequency': scope.cronDescriber });
           scope.params.updating = false;
-        }, function (error) {
-          scope.status = false;
-          $http({
-            method: 'GET',
-            url: API.WORKFLOW + 'api/scheduled/?format=json&name=Investigate_Outbreak-Alerts'
-          }).then(function (response) {
-            if (response.data['hydra:member'] && response.data['hydra:member'].length > 0) {
-              scope.scheduleConfig.id = response.data['hydra:member'][0].id;
-              scope.$emit('scheduleDetails', { 'status': scope.status, 'scheduleId': scope.scheduleConfig.id });
-            }
-            else {
-              scope.scheduleConfig.id = null;
-              scope.$emit('scheduleDetails', { 'status': scope.status, 'scheduleId': scope.scheduleConfig.id });
-            }
-            scope.params.updating = false;
-          });
-        });
+          _isScheduleModified = true;
+          scope.scheduleForm.$setPristine();
+        }
+          // }, 
+          // function (error) {
+          //   scope.status = false;
+          //   $http({
+          //     method: 'GET',
+          //     url: API.WORKFLOW + 'api/scheduled/?format=json&name=Investigate_Outbreak-Alerts'
+          //   }).then(function (response) {
+          //     if (response.data['hydra:member'] && response.data['hydra:member'].length > 0) {
+          //       scope.scheduleConfig.id = response.data['hydra:member'][0].id;
+          //       scope.$emit('scheduleDetails', { 'status': scope.status, 'scheduleId': scope.scheduleConfig.id });
+          //     }
+          //     else {
+          //       scope.scheduleConfig.id = null;
+          //       scope.$emit('scheduleDetails', { 'status': scope.status, 'scheduleId': scope.scheduleConfig.id });
+          //     }
+          //     scope.params.updating = false;
+          //   });
+          // }
+        );
       }
     }
     return directive;

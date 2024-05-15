@@ -8,9 +8,9 @@
         .module('cybersponse')
         .controller('outbreakAlertConfiguration200Ctrl', outbreakAlertConfiguration200Ctrl);
 
-    outbreakAlertConfiguration200Ctrl.$inject = ['$scope', '$http', 'WizardHandler', '$controller', '$state', 'connectorService', 'marketplaceService', 'CommonUtils', '$window', 'toaster', 'currentPermissionsService', '_', '$resource', 'API', 'ALL_RECORDS_SIZE', 'widgetBasePath', '$rootScope', 'SchedulesService'];
+    outbreakAlertConfiguration200Ctrl.$inject = ['$scope', '$http', 'WizardHandler', '$controller', '$state', 'connectorService', 'marketplaceService', 'CommonUtils', '$window', 'toaster', 'currentPermissionsService', '_', '$resource', 'API', 'ALL_RECORDS_SIZE', 'widgetBasePath', '$rootScope', 'SchedulesService', '$timeout'];
 
-    function outbreakAlertConfiguration200Ctrl($scope, $http, WizardHandler, $controller, $state, connectorService, marketplaceService, CommonUtils, $window, toaster, currentPermissionsService, _, $resource, API, ALL_RECORDS_SIZE, widgetBasePath, $rootScope, SchedulesService) {
+    function outbreakAlertConfiguration200Ctrl($scope, $http, WizardHandler, $controller, $state, connectorService, marketplaceService, CommonUtils, $window, toaster, currentPermissionsService, _, $resource, API, ALL_RECORDS_SIZE, widgetBasePath, $rootScope, SchedulesService, $timeout) {
         $controller('BaseConnectorCtrl', {
             $scope: $scope
         });
@@ -62,7 +62,8 @@
                 splunkParams: null
             },
             timeFrameDays: null,
-            emailAddress: null
+            emailAddress: null,
+            scheduleFrequency: null
         };
         $scope.severityValues = ['Critical', 'High', 'Medium'];
         $scope.$watch('activeTab', function ($newTab, $oldTab) {
@@ -81,6 +82,7 @@
         $scope.$on('scheduleDetails', function (event, data) {
             $scope.scheduleStatus = data.status;
             $scope.scheduleID = data.scheduleId;
+            $scope.selectedEnv.scheduleFrequency = data.scheduleFrequency;
         });
 
         function triggerSchedule() {
@@ -162,6 +164,8 @@
         }
 
         function close() {
+            $timeout(function () { $window.location.reload(); }, 3000);
+            $state.go('main.modules.list', { module: 'outbreak_alerts' }, { reload: true });
             $scope.$parent.$parent.$parent.$ctrl.handleClose();
         }
 
@@ -186,7 +190,7 @@
                 if (response['hydra:member'] && response['hydra:member'].length > 0) {
                     $scope.processingPicklist = false;
                     $scope.huntToolsMapping = response['hydra:member'][0].jSONValue;
-                    $scope.threatHuntTools = Object.keys($scope.huntToolsMapping);
+                    $scope.threatHuntTools = Object.keys($scope.huntToolsMapping).sort();
                     WizardHandler.wizard('OutbreaksolutionpackWizard').next();
                 }
                 else {
