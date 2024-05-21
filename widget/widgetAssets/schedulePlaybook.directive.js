@@ -17,6 +17,7 @@
     var directive = {
       restrict: 'A',
       scope: {
+        viewWidgetVars: '<'
       },
       controller: 'BaseCtrl',
       templateUrl: 'widgets/installed/outbreakAlertConfiguration-2.0.0/widgetAssets/schedulePlaybook.html',
@@ -106,17 +107,14 @@
                 } else {
                   playbookId = scope.scheduleConfig.kwargs.wf_iri;
                 }
-
                 scope.scheduleConfig.kwargs.wf = API.API_3_BASE + API.WORKFLOWS + playbookId;
               }
-
               scope.processingScheduleData = false;
               scope.scheduleConfig.kwargs.start_time = scope.scheduleConfig.kwargs.start_time || scope.scheduleConfig.start_time;
               scope.scheduleConfig.kwargs.expires = scope.scheduleConfig.kwargs.expires || scope.scheduleConfig.expires;
               scope.scheduleConfig.kwargs.timezone = scope.scheduleConfig.kwargs.timezone || scope.scheduleConfig.crontab.timezone;
               updateCron();;
             });
-
           }
           else {
             updateCron();
@@ -245,24 +243,6 @@
           _isScheduleModified = true;
           scope.scheduleForm.$setPristine();
         }
-          // }, 
-          // function (error) {
-          //   scope.status = false;
-          //   $http({
-          //     method: 'GET',
-          //     url: API.WORKFLOW + 'api/scheduled/?format=json&name=Investigate_Outbreak-Alerts'
-          //   }).then(function (response) {
-          //     if (response.data['hydra:member'] && response.data['hydra:member'].length > 0) {
-          //       scope.scheduleConfig.id = response.data['hydra:member'][0].id;
-          //       scope.$emit('scheduleDetails', { 'status': scope.status, 'scheduleId': scope.scheduleConfig.id });
-          //     }
-          //     else {
-          //       scope.scheduleConfig.id = null;
-          //       scope.$emit('scheduleDetails', { 'status': scope.status, 'scheduleId': scope.scheduleConfig.id });
-          //     }
-          //     scope.params.updating = false;
-          //   });
-          // }
         );
       }
     }
