@@ -403,7 +403,7 @@
             var installOutbreakType = _.map($scope.selectedEnv.installOutbreakType, item => item + "_Severity_Outbreak_Alert");
             var queryPayload =
             {
-                "request": {'outbreak_types': installOutbreakType}
+                "request": {'outbreak_types': installOutbreakType, 'email_address': $scope.selectedEnv.emailAddress, 'time_frame_days': $scope.selectedEnv.timeFrameDays}
             }
             var queryUrl = API.MANUAL_TRIGGER + '7d924203-e5e3-4ce5-b704-e8f3283c7b92';
             $http.post(queryUrl, queryPayload).then(function (response) {
