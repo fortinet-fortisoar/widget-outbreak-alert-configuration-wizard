@@ -30,6 +30,17 @@
 					content: "\e998";
 				}
 			}
+			/* &:nth-child(6) {
+				&.done::before,
+				&.current::before,
+				&.editing::before {
+					left: 0px;
+					right: 0px;
+				}
+				a::before {
+					content: "\ef543";
+				}
+			} */
 			&:last-child {
 				a::before {
 					content: "\e97e";
@@ -42,4 +53,10 @@
 .info-graphic-margin {
 	margin-top: 20%;
 	margin-left: 20%;
+}
+
+#outbreakConnectorWizard > div{
+	.col-md-8{
+		width: 100%;
+	}
 }
