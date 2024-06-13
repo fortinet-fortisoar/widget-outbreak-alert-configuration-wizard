@@ -25,6 +25,14 @@
                 <p class="font-Size-13 muted">
                   <span>{{viewWidgetVars.START_PAGE_DISCRIPTION}}</span>
                 </p>
+                <h6 class="font-weight-normal margin-bottom-sm modal-title text-transform-none">
+                  {{viewWidgetVars.PREREQUISITIES_TITLE}}</h6>
+                <p class="font-Size-13 muted">
+                  <span>{{viewWidgetVars.PREREQUISITIES_1}}<strong>{{viewWidgetVars.PREREQUISITIES_2}}</strong>{{viewWidgetVars.PREREQUISITIES_3}}<strong>{{viewWidgetVars.PREREQUISITIES_4}}</strong>{{viewWidgetVars.PREREQUISITIES_5}}</span>
+                </p>
+                <p class="font-Size-13 muted">
+                  <span>{{viewWidgetVars.PREREQUISITIES_6}}<strong>{{viewWidgetVars.PREREQUISITIES_7}}</strong>{{viewWidgetVars.PREREQUISITIES_8}}</span>
+                </p>
               </div>
               <button type="button" class="btn btn-primary btn-sm margin-top-xlg text-transform-none font-size-14"
                 data-ng-click="selectHuntTool()" id="solutionpack-next-btn">{{viewWidgetVars.START_PAGE_Button}}<i
@@ -100,7 +108,7 @@
                       </div>
                       <div class="col-md-6 padding-left-0 prerequisites-section">
                         <div class="font-size-30 line-height-1 margin-bottom-lg margin-top-18 muted-80">
-                          {{viewWidgetVars.THIRD_PAGE_TITLE}}</div>
+                          {{viewWidgetVars.THIRD_PAGE_TITLE}}{{ huntTool }}</div>
                         <div class="form-group">
                           <uib-accordion>
                             <div uib-accordion-group class="panel-default">
@@ -199,7 +207,7 @@
                               </div>
                               <hr class="margin-0">
                               <div ng-form="formHolder.connectorForm" name="formHolder.connectorForm">
-                                <div data-ng-if="selectedConnector"
+                                <div data-ng-if="selectedConnector" id="outbreakConnectorWizard"
                                   class="margin-top-negative-20 margin-top-md padding-left-0 padding-right-0 connector-config-width"
                                   data-ng-include="'app/settings/connectorConfig.html'">
                                 </div>
@@ -240,6 +248,7 @@
                                 <div ng-form="fazForm" name="fazForm">
                                   <cs-connector-field-renderer data-cs-form="fazForm"
                                     data-json-fields="threatHuntToolsParams.fazParams"
+                                    data-connector-data="{'config':fazForm.configuration}"
                                     data-params="selectedEnv.threatHuntToolsParams.fazParams"
                                     data-enable-record-fields="false" data-enable-jinja="false">
                                   </cs-connector-field-renderer>
@@ -252,6 +261,7 @@
                                 <div ng-form="fsmForm" name="fsmForm">
                                   <cs-connector-field-renderer data-cs-form="fsmForm"
                                     data-json-fields="threatHuntToolsParams.fsmParams"
+                                    data-connector-data="{'config':fsmForm.configuration}"
                                     data-params="selectedEnv.threatHuntToolsParams.fsmParams"
                                     data-enable-record-fields="false" data-enable-jinja="false">
                                   </cs-connector-field-renderer>
@@ -264,6 +274,7 @@
                                 <div ng-form="qradarForm" name="qradarForm">
                                   <cs-connector-field-renderer data-cs-form="qradarForm"
                                     data-json-fields="threatHuntToolsParams.qRadarParams"
+                                    data-connector-data="{'config':qradarForm.configuration}"
                                     data-params="selectedEnv.threatHuntToolsParams.qRadarParams"
                                     data-enable-record-fields="false" data-enable-jinja="false">
                                   </cs-connector-field-renderer>
@@ -276,6 +287,7 @@
                                 <div ng-form="splunkForm" name="splunkForm">
                                   <cs-connector-field-renderer data-cs-form="splunkForm"
                                     data-json-fields="threatHuntToolsParams.splunkParams"
+                                    data-connector-data="{'config':splunkForm.configuration}"
                                     data-params="selectedEnv.threatHuntToolsParams.splunkParams"
                                     data-enable-record-fields="false" data-enable-jinja="false">
                                   </cs-connector-field-renderer>
@@ -323,10 +335,10 @@
                       <div class="form-group">
                         <div class="font-size-18 muted-80 line-height-1">{{viewWidgetVars.FOURTH_PAGE_SECTION_1_TITLE}}
                         </div><br />
-                        <p class="font-Size-13 muted">
+                        <p class="font-Size-13 muted margin-auto">
                           <span>{{viewWidgetVars.FOURTH_PAGE_SECTION_1_DISCRIPTION}} <br /></span>
                         </p>
-                        <div class="align-items-center control-label display-inline-flex margin-top-8 padding-left-md">
+                        <div class="align-items-center muted font-size-13 display-inline-flex padding-left-md">
                           {{viewWidgetVars.FOURTH_PAGE_SECTION_1_PARAM_1}}&nbsp;
                           <input type="number" class="padding-left-sm padding-right-sm width-100px form-control"
                             id="timeFrameDays" name="timeFrameDays" data-ng-init="selectedEnv.timeFrameDays = 30"
@@ -389,10 +401,8 @@
                   <div class="font-size-30 muted-80 line-height-1">{{viewWidgetVars.FIFTH_PAGE_TITLE}}</div>
                   <div
                     class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
-                    <div class="font-size-18 muted-80 line-height-1">{{viewWidgetVars.FIFTH_PAGE_SECTION_1_TITLE}}</div>
-                    <br />
                     <div class="checkbox">
-                      <label for="resetAuditLogs">
+                      <label for="resetAuditLogs" class="muted-80">
                         <input id="autoInstall" type="checkbox" name="autoInstall" data-ng-model="autoInstall.enabled"
                           data-cs-focus>&nbsp;{{viewWidgetVars.FIFTH_PAGE_SECTION_1_CHECKBOX}}
                       </label>
@@ -403,12 +413,15 @@
                           class="margin-right-sm icon icon-settings-01"></i>{{viewWidgetVars.FIFTH_PAGE_SECTION_1_HEADING}}
                         <span class="required text-danger">*</span>
                       </div>
-                      <div class="margin-bottom-lg padding-bottom-25">
+                      <div class="muted margin-bottom-lg padding-bottom-25">
                         <small
-                          class="control-label margin-top-8 margin-right-md pull-left">{{viewWidgetVars.FIFTH_PAGE_SECTION_1_DISCRIPTION}}
+                          class="margin-top-8 margin-right-md pull-left">{{viewWidgetVars.FIFTH_PAGE_SECTION_1_DISCRIPTION_1}}
+                        </small>
+                        <small
+                          class="margin-top-8 margin-right-md pull-left">{{viewWidgetVars.FIFTH_PAGE_SECTION_1_DISCRIPTION_2}}
                         </small>
                       </div>
-                      <div class="cs-select">
+                      <div class="cs-select margin-top-27">
                         <ui-select name="select_outbreak_type" id="select_outbreak_type"
                           data-ng-model="selectedEnv.installOutbreakType" data-ng-required="true" multiple
                           class="custom-multi-select" append-to-body="false">
@@ -485,28 +498,28 @@
               </div>
               <div
                 class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
-                <div class="data-ingestion-summary padding-top-lg muted">
+                <div class="data-ingestion-summary padding-top-lg">
                   <h6 class="font-weight-normal margin-bottom-sm modal-title text-transform-none">
                     {{viewWidgetVars.SIXTH_PAGE_SUMMARY}}</h6>
-                  <p><i
-                      class="completed icon icon-approval margin-right-md"></i>{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_1}}<span
-                      class="bold">{{selectedEnv.huntTools.join(', ')}}</span></p>
-                  <p><i
-                      class="completed icon icon-approval margin-right-md"></i>{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_2}}<span
-                      class="bold">{{selectedEnv.huntTools.join(', ')}}</span></p>
-                  <p><i
-                      class="completed icon icon-approval margin-right-md"></i>{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_3}}<span
-                      class="bold">{{selectedEnv.timeFrameDays}} days</span></p>
-                  <p><i
-                      class="completed icon icon-approval margin-right-md"></i>{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_4}}<span
-                      class="bold">{{selectedEnv.scheduleFrequency}}</span></p>
-                  <p><i
-                      class="completed icon icon-approval margin-right-md"></i>{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_5}}<span
-                      class="bold">{{selectedEnv.installOutbreakType.join(', ')}}
+                  <p><i class="completed icon icon-approval margin-right-md font-size-16"></i><span
+                      class="bold muted">{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_1}} {{selectedEnv.huntTools.join(',
+                      ')}}</span></p>
+                  <p><i class="completed icon icon-approval margin-right-md font-size-16"></i><span
+                      class="bold muted">{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_2}} {{selectedEnv.huntTools.join(',
+                      ')}}</span></p>
+                  <p><i class="completed icon icon-approval margin-right-md font-size-16"></i><span
+                      class="bold muted">{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_3}} {{selectedEnv.timeFrameDays}}
+                      days</span></p>
+                  <p><i class="completed icon icon-approval margin-right-md font-size-16"></i><span
+                      class="bold muted">{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_4}}
+                      {{selectedEnv.scheduleFrequency}}</span></p>
+                  <p><i class="completed icon icon-approval margin-right-md font-size-16"></i><span
+                      class="bold muted">{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_5}}
+                      {{selectedEnv.installOutbreakType.join(', ')}}
                       {{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_5_1}}</span></p>
-                  <p><i
-                      class="completed icon icon-approval margin-right-md"></i>{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_6}}<span
-                      class="bold">{{selectedEnv.emailAddress}}</span></p>
+                  <p><i class="completed icon icon-approval margin-right-md font-size-16"></i><span
+                      class="bold muted">{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_6}}
+                      {{selectedEnv.emailAddress}}</span></p>
                 </div>
               </div>
               <div
@@ -516,7 +529,6 @@
                   <button id="run-auto-install-outbreaks" type="button" class="btn btn-second-primary btn-sm"
                     data-ng-click="triggerAutoInstallOutbreaksPlaybook()" title="Auto Install Outbreaks Now"><i
                       class="icon icon-trigger margin-right-sm"></i>{{viewWidgetVars.SIXTH_PAGE_AUTO_INSTALL_BUTTON_LABEL}}</button>
-                  &nbsp;{{viewWidgetVars.SIXTH_PAGE_AUTO_INSTALL_HEADING_2}}
                 </div>
               </div>
             </div>
@@ -528,9 +540,9 @@
     <div class="ingestion-modal-footer">
       <button type="button" class="btn btn-sm btn-second-primary margin-top-lg margin-left-lg"
         id="solutionpack-configure-back-btn" data-ng-click="backThreatHuntSchedule()"><i
-          class="fa fa-chevron-left margin-right-sm"></i>Back</button>
+          class="fa fa-chevron-left margin-right-sm"></i>{{viewWidgetVars.SIXTH_PAGE_BACK}}</button>
       <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg"
-        data-ng-click="close()" id="solutionpack-configure-finish-btn">Finish<i
+        data-ng-click="close()" id="solutionpack-configure-finish-btn">{{viewWidgetVars.SIXTH_PAGE_NEXT}}<i
           class="fa fa-chevron-right margin-left-sm"></i>
       </button>
     </div>
