@@ -47,6 +47,7 @@
         $scope.threatTuntSchedule = $scope.isLightTheme ? widgetBasePath + 'images/threat-hunt-schedule-light.svg' : widgetBasePath + 'images/threat-hunt-schedule-dark.svg';
         $scope.finishInfoGraphics = widgetBasePath + 'images/finish.png';
         $scope.widgetCSS = widgetBasePath + 'widgetAssets/wizard-style.css';
+        $scope.activeTab = 0;
         $controller('BaseConnectorCtrl', {
             $scope: $scope
         });
@@ -98,8 +99,8 @@
             if (tabIndex !== 0) {
                 $scope.$broadcast('cs:getList');
             }
-            $scope.activeTab = tabIndex === undefined ? 0 : tabIndex;
-            if (tabIndex === undefined) {
+            $scope.activeTab = CommonUtils.isUndefined(tabIndex) ? 0 : tabIndex;
+            if (CommonUtils.isUndefined(tabIndex)) {
                 var selectedHuntTool = $scope.selectedEnv.huntTools[0];
                 var huntToolName = _.get($scope.huntToolsMapping, selectedHuntTool);
                 if ($scope.formHolder.connectorForm && $scope.formHolder.connectorForm.$dirty) {
@@ -115,6 +116,30 @@
                 }
                 _fetchConnectorConfig(huntToolName);
             }
+        }
+
+        function _activeErrorTab(tabIndex, tabName) {
+            $scope.activeTab = CommonUtils.isUndefined(tabIndex) ? 0 : tabIndex;
+            var huntToolName = _.get($scope.huntToolsMapping, tabName);
+            var formParams = {};
+            var hutparams = {};
+            for (let key in $scope.formHolder.connectorForm.$$parentForm) {
+                if (!key.startsWith("$") && key.indexOf('.') === -1) {
+                    formParams[key] = $scope.formHolder.connectorForm.$$parentForm[key];
+                    for (let k in formParams[key]) {
+                        if (!k.startsWith("$") && k.indexOf('.') === -1) {
+                            hutparams[k] = formParams[key][k];
+                        }
+                    }
+                }
+            }
+            for (let k in hutparams) {
+                hutparams[k].$touched = true;
+                if (hutparams[k].$valid === false) {
+                    hutparams[k].$invalid = true;
+                }
+            }
+            _fetchConnectorConfig(huntToolName);
         }
 
         function configHuntTool() {
@@ -322,23 +347,31 @@
         }
 
         function nextNotification(threatHuntConfigForm) {
-            if (threatHuntConfigForm.fazForm !== undefined && threatHuntConfigForm.fazForm.$invalid) {
+            if (!CommonUtils.isUndefined(threatHuntConfigForm.fazForm) && threatHuntConfigForm.fazForm.$invalid) {
+                var huntToolIndex = $scope.selectedEnv.huntTools.indexOf('Fortinet FortiAnalyzer');
+                _activeErrorTab(huntToolIndex, 'Fortinet FortiAnalyzer');
                 toaster.error({
                     body: 'Fortinet FortiAnalyzer Threat Hunt Tool parameters are required'
                 });
                 return;
-            } else if (threatHuntConfigForm.fsmForm !== undefined && threatHuntConfigForm.fsmForm.$invalid) {
+            } else if (!CommonUtils.isUndefined(threatHuntConfigForm.fsmForm) && threatHuntConfigForm.fsmForm.$invalid) {
+                var huntToolIndex = $scope.selectedEnv.huntTools.indexOf('Fortinet FortiSIEM');
+                _activeErrorTab(huntToolIndex, 'Fortinet FortiSIEM');
                 toaster.error({
                     body: 'Fortinet FortiSIEM Threat Hunt Tool parameters are required'
                 });
                 return;
             }
-            else if (threatHuntConfigForm.qradarForm !== undefined && threatHuntConfigForm.qradarForm.$invalid) {
+            else if (!CommonUtils.isUndefined(threatHuntConfigForm.qradarForm) && threatHuntConfigForm.qradarForm.$invalid) {
+                var huntToolIndex = $scope.selectedEnv.huntTools.indexOf('IBM QRadar');
+                _activeErrorTab(huntToolIndex, 'IBM QRadar');
                 toaster.error({
                     body: 'IBM QRadar Threat Hunt Tool parameters are required'
                 });
                 return;
-            } else if (threatHuntConfigForm.splunkForm !== undefined && threatHuntConfigForm.splunkForm.$invalid) {
+            } else if (!CommonUtils.isUndefined(threatHuntConfigForm.splunkForm) && threatHuntConfigForm.splunkForm.$invalid) {
+                var huntToolIndex = $scope.selectedEnv.huntTools.indexOf('Splunk');
+                _activeErrorTab(huntToolIndex, 'Splunk');
                 toaster.error({
                     body: 'Splunk Threat Hunt Tool parameters are required'
                 });
@@ -357,7 +390,6 @@
                 return;
             }
             WizardHandler.wizard('OutbreaksolutionpackWizard').next();
-            triggerPlaybook();
         }
 
         function threatHuntSchedule(scheduleForm) {
@@ -368,6 +400,7 @@
                 return;
             }
             WizardHandler.wizard('OutbreaksolutionpackWizard').next();
+            triggerPlaybook();
         }
 
         function backStartPage() {
@@ -403,13 +436,13 @@
             var installOutbreakType = _.map($scope.selectedEnv.installOutbreakType, item => item + "_Severity_Outbreak_Alert");
             var queryPayload =
             {
-                "request": {'outbreak_types': installOutbreakType, 'email_address': $scope.selectedEnv.emailAddress, 'time_frame_days': $scope.selectedEnv.timeFrameDays}
+                "request": { 'outbreak_types': installOutbreakType, 'email_address': $scope.selectedEnv.emailAddress, 'time_frame_days': $scope.selectedEnv.timeFrameDays }
             }
             var queryUrl = API.MANUAL_TRIGGER + '7d924203-e5e3-4ce5-b704-e8f3283c7b92';
             $http.post(queryUrl, queryPayload).then(function (response) {
                 toaster.success({
-                                 body: 'Auto install oubtreak alert playbook triggered successfully.'
-                         });
+                    body: 'Auto install oubtreak alert playbook triggered successfully.'
+                });
             });
         }
 
@@ -428,6 +461,15 @@
                         LABEL_TITLE: widgetUtilityService.translate('outbreakAlertConfiguration.LABEL_TITLE'),
                         START_PAGE_TITLE: widgetUtilityService.translate('outbreakAlertConfiguration.START_PAGE_TITLE'),
                         START_PAGE_DISCRIPTION: widgetUtilityService.translate('outbreakAlertConfiguration.START_PAGE_DISCRIPTION'),
+                        PREREQUISITIES_TITLE: widgetUtilityService.translate('outbreakAlertConfiguration.PREREQUISITIES_TITLE'),
+                        PREREQUISITIES_1: widgetUtilityService.translate('outbreakAlertConfiguration.PREREQUISITIES_1'),
+                        PREREQUISITIES_2: widgetUtilityService.translate('outbreakAlertConfiguration.PREREQUISITIES_2'),
+                        PREREQUISITIES_3: widgetUtilityService.translate('outbreakAlertConfiguration.PREREQUISITIES_3'),
+                        PREREQUISITIES_4: widgetUtilityService.translate('outbreakAlertConfiguration.PREREQUISITIES_4'),
+                        PREREQUISITIES_5: widgetUtilityService.translate('outbreakAlertConfiguration.PREREQUISITIES_5'),
+                        PREREQUISITIES_6: widgetUtilityService.translate('outbreakAlertConfiguration.PREREQUISITIES_6'),
+                        PREREQUISITIES_7: widgetUtilityService.translate('outbreakAlertConfiguration.PREREQUISITIES_7'),
+                        PREREQUISITIES_8: widgetUtilityService.translate('outbreakAlertConfiguration.PREREQUISITIES_8'),
                         START_PAGE_Button: widgetUtilityService.translate('outbreakAlertConfiguration.START_PAGE_Button'),
 
                         SECOND_PAGE_WZ_TITLE: widgetUtilityService.translate('outbreakAlertConfiguration.SECOND_PAGE_WZ_TITLE'),
@@ -465,7 +507,8 @@
                         FIFTH_PAGE_SECTION_1_TITLE: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_1_TITLE'),
                         FIFTH_PAGE_SECTION_1_CHECKBOX: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_1_CHECKBOX'),
                         FIFTH_PAGE_SECTION_1_HEADING: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_1_HEADING'),
-                        FIFTH_PAGE_SECTION_1_DISCRIPTION: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_1_DISCRIPTION'),
+                        FIFTH_PAGE_SECTION_1_DISCRIPTION_1: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_1_DISCRIPTION_1'),
+                        FIFTH_PAGE_SECTION_1_DISCRIPTION_2: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_1_DISCRIPTION_2'),
                         FIFTH_PAGE_SECTION_2_TITLE: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_2_TITLE'),
                         FIFTH_PAGE_SECTION_2_DISCRIPTION: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_2_DISCRIPTION'),
                         FIFTH_PAGE_SECTION_2_EMAIL: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_2_EMAIL'),
@@ -488,10 +531,11 @@
                         SIXTH_PAGE_SUMMARY_HEADING_5: widgetUtilityService.translate('outbreakAlertConfiguration.SIXTH_PAGE_SUMMARY_HEADING_5'),
                         SIXTH_PAGE_SUMMARY_HEADING_5_1: widgetUtilityService.translate('outbreakAlertConfiguration.SIXTH_PAGE_SUMMARY_HEADING_5_1'),
                         SIXTH_PAGE_SUMMARY_HEADING_6: widgetUtilityService.translate('outbreakAlertConfiguration.SIXTH_PAGE_SUMMARY_HEADING_6'),
-                        SIXTH_PAGE_AUTO_INSTALL_HEADING_1: widgetUtilityService.translate('outbreakAlertConfiguration.SIXTH_PAGE_SUMMARY_HEADING_6'),
-                        SIXTH_PAGE_AUTO_INSTALL_HEADING_2: widgetUtilityService.translate('outbreakAlertConfiguration.SIXTH_PAGE_AUTO_INSTALL_HEADING_2'),
+                        SIXTH_PAGE_AUTO_INSTALL_HEADING_1: widgetUtilityService.translate('outbreakAlertConfiguration.SIXTH_PAGE_AUTO_INSTALL_HEADING_1'),
                         SIXTH_PAGE_AUTO_INSTALL_BUTTON_LABEL: widgetUtilityService.translate('outbreakAlertConfiguration.SIXTH_PAGE_AUTO_INSTALL_BUTTON_LABEL'),
-                        
+                        SIXTH_PAGE_BACK: widgetUtilityService.translate('outbreakAlertConfiguration.SIXTH_PAGE_BACK'),
+                        SIXTH_PAGE_NEXT: widgetUtilityService.translate('outbreakAlertConfiguration.SIXTH_PAGE_NEXT'),
+
                         DIRECTIVE_CRON_VALUE: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_CRON_VALUE'),
                         DIRECTIVE_MINUTE_LABEL: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_MINUTE_LABEL'),
                         DIRECTIVE_HOUR_LABEL: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_HOUR_LABEL'),
