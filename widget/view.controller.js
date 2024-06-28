@@ -390,6 +390,7 @@
                 return;
             }
             WizardHandler.wizard('OutbreaksolutionpackWizard').next();
+            triggerPlaybook();
         }
 
         function threatHuntSchedule(scheduleForm) {
@@ -400,7 +401,6 @@
                 return;
             }
             WizardHandler.wizard('OutbreaksolutionpackWizard').next();
-            triggerPlaybook();
         }
 
         function backStartPage() {
