@@ -10,14 +10,15 @@
     .directive('schedulePlaybook', schedulePlaybook);
 
   schedulePlaybook.$inject = ['$http', 'API', '$filter', '$window', 'CRUD_HUB', 'TimeZoneServices', 'SchedulesService',
-    'localStorageService', 'currentPermissionsService'];
+    'localStorageService', 'currentPermissionsService', '_'];
 
   function schedulePlaybook($http, API, $filter, $window, CRUD_HUB, TimeZoneServices, SchedulesService,
-    localStorageService, currentPermissionsService) {
+    localStorageService, currentPermissionsService, _) {
     var directive = {
       restrict: 'A',
       scope: {
-        viewWidgetVars: '<'
+        viewWidgetVars: '<',
+        jsonData: '=',
       },
       controller: 'BaseCtrl',
       templateUrl: 'widgets/installed/outbreakAlertConfiguration-2.0.0/widgetAssets/schedulePlaybook.html',
@@ -37,7 +38,7 @@
       };
       scope.hidePlaybook = false;
       scope.scheduleConfig = {
-        name: 'Investigate_Outbreak-Alerts',
+        name: 'Investigate_' + scope.jsonData.name,
         id: null,
         crontab: {
           minute: '01',
@@ -59,6 +60,37 @@
           day_of_week: '*',
           day_of_month: '*',
           month_of_year: '*'
+        },
+
+        form: {
+          ingestMethod: 'ingestionPlaybook',
+          sampleData: null,
+          sampleDataParsed: null,
+          sampleDataParsedCopy: [],
+          scheduleSaving: false,
+          fieldMappingSaving: false,
+          scheduleFetching: false,
+          maxPagination: 10,
+          scheduled: 'N',
+          toggleField: {},
+          togglePicklist: {},
+          scheduleRequire: false,
+          notificationMode: false,
+          appPushMode: false,
+          fields: {},
+          schedule: {
+              name: undefined,
+              crontab: {
+              minute: '01',
+              hour: '0',
+              day_of_week: '*',
+              day_of_month: '*',
+              month_of_year: '*'
+              },
+              kwargs: {
+              exit_if_running: false
+              }
+          }
         },
         config: {},
         cronexpression: {
@@ -91,8 +123,10 @@
       function loadScheduleData() {
         $http({
           method: 'GET',
-          url: API.WORKFLOW + 'api/scheduled/?format=json&name=Investigate_Outbreak-Alerts'
+          url: API.WORKFLOW + 'api/scheduled/?format=json&name=Investigate_' + scope.jsonData.name
         }).then(function (response) {
+          scope.params.form.schedule.kwargs.exit_if_running = true;
+          scope.params.form.scheduled = 'Y'
           if (response.data['hydra:member'] && response.data['hydra:member'].length > 0) {
             scope.scheduleConfig.id = response.data['hydra:member'][0].id;
             scope.$emit('scheduleDetails', { 'status': true, 'scheduleId': scope.scheduleConfig.id, 'scheduleFrequency': scope.cronDescriber });
@@ -117,6 +151,8 @@
             });
           }
           else {
+            scope.params.form.scheduled = 'N'
+            scope.params.form.schedule.kwargs.exit_if_running= false;
             updateCron();
           }
         });
@@ -176,6 +212,9 @@
       };
 
       scope.setCronValue = function (field, key) {
+        if (scope.params.form.scheduled === 'N') {
+          return;
+        }
         angular.forEach(scope.scheduleConfig.crontab, function (cronVal, cronKey) {
           if (cronKey === 'minute' || cronKey === 'hour' || cronKey === 'day_of_week' || cronKey === 'day_of_month' || cronKey === 'month_of_year') {
             scope.scheduleConfig.crontab[cronKey] = '*';
@@ -215,7 +254,7 @@
         }
         scope.params.updating = true;
         scope.scheduleConfig.enabled = true;
-        scope.scheduleConfig.kwargs.wf_iri = "/api/3/workflows/70d2c10e-50d4-43ce-b606-0f0d0d305fad";
+        scope.scheduleConfig.kwargs.wf_iri = "/api/3/workflows/" + scope.jsonData.playbook_uuid;
         var priority_payload = {
           "@id": "/api/3/picklists/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
           "@type": "Picklist",
