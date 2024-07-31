@@ -211,7 +211,6 @@
                                   class="margin-top-negative-20 margin-top-md padding-left-0 padding-right-0 connector-config-width"
                                   data-ng-include="'app/settings/connectorConfig.html'">
                                 </div>
-                                <!-- formholder: {{ formHolder }} -->
                                 <div data-ng-show="selectedConnector" class="col-md-12 margin-top-18">
                                   <button type="button" class="btn btn-primary"
                                     data-ng-disabled="!(formHolder.connectorForm.$valid && formHolder.connectorForm.$dirty)"
@@ -225,7 +224,6 @@
                             </div>
                           </uib-accordion>
                         </div>
-                        <!-- <form name="threatHuntConfigForm"> -->
                         <div class="form-group">
                           <uib-accordion>
                             <div uib-accordion-group class="panel-default" is-open="true">
@@ -240,7 +238,6 @@
                                   <div class="clearfix"></div>
                                 </div>
                               </uib-accordion-heading>
-                              <!-- <div ng-form="fazForm" name="fazForm"> -->
                               <div data-ng-if="huntTool==='Fortinet FortiAnalyzer'" class="form-group margin-top-sm">
                                 <p class="font-Size-13 muted">
                                   <span>{{viewWidgetVars.THIRD_PAGE_FAZ_PARAMS}}</span>
@@ -338,20 +335,22 @@
                         <p class="font-Size-13 muted margin-auto">
                           <span>{{viewWidgetVars.FOURTH_PAGE_SECTION_1_DISCRIPTION}} <br /></span>
                         </p>
-                        <div class="align-items-center muted font-size-13 display-inline-flex padding-left-md">
-                          {{viewWidgetVars.FOURTH_PAGE_SECTION_1_PARAM_1}}&nbsp;
-                          <input type="number" class="padding-left-sm padding-right-sm width-100px form-control"
-                            id="timeFrameDays" name="timeFrameDays" data-ng-init="selectedEnv.timeFrameDays = 30"
-                            data-ng-model="selectedEnv.timeFrameDays" min="1" data-ng-pattern="onlyNumbers"
-                            autocomplete="off" data-ng-required="true" />&nbsp;
-                          {{viewWidgetVars.FOURTH_PAGE_SECTION_1_PARAM_2}}<span class="required text-danger">*</span>
-                        </div>
+                          <div class="align-items-center muted font-size-13 display-inline-flex">
+                            {{viewWidgetVars.FOURTH_PAGE_SECTION_1_PARAM_1}}&nbsp;
+                            <input type="text" class="padding-left-sm padding-right-sm width-100px form-control"
+                              id="timeFrameDays" name="timeFrameDays" 
+                              data-ng-init="selectedEnv.timeFrameDays = 30"
+                              data-ng-model="selectedEnv.timeFrameDays" 
+                              data-ng-pattern="onlyNumbers"
+                              autocomplete="off" data-ng-required="true" />&nbsp;
+                            {{viewWidgetVars.FOURTH_PAGE_SECTION_1_PARAM_2}}<span class="required text-danger">*</span>
+                          </div>                     
                         <div class="margin-left-25">
                           <div data-ng-show="scheduleForm.threatHuntWindowForm.timeFrameDays.$error.pattern"
-                            class="font-size-12 margin-left-120 ng-hide padding-left-120 text-danger">
+                            class="font-size-12 ng-hide padding-left-120 text-danger">
                             {{viewWidgetVars.FOURTH_PAGE_SECTION_1_TOOLTIP_1}}</div>
                           <div data-ng-show="scheduleForm.threatHuntWindowForm.timeFrameDays.$error.required"
-                            class="font-size-12 margin-left-120 ng-hide padding-left-120 text-danger">
+                            class="font-size-12 margin-left-55 ng-hide padding-left-120 text-danger">
                             {{viewWidgetVars.FOURTH_PAGE_SECTION_1_TOOLTIP_2}}
                           </div>
                         </div>
@@ -366,7 +365,9 @@
                     <p class="font-Size-13 muted">
                       <span>{{viewWidgetVars.FOURTH_PAGE_SECTION_2_DISCRIPTION}}<br /></span>
                     </p>
-                    <div class="margin-left-md" data-schedule-playbook view-widget-vars="viewWidgetVars"></div>
+                    <div class="margin-left-md" data-schedule-playbook view-widget-vars="viewWidgetVars"
+                      json-data="ingestionDetails">
+                    </div>
                   </div>
                 </div>
               </div>

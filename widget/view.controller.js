@@ -20,7 +20,7 @@
         $scope.triggerAutoInstallOutbreaksPlaybook = triggerAutoInstallOutbreaksPlaybook;
         $scope.backStartPage = backStartPage;
         $scope.configHuntTool = configHuntTool;
-        $scope.onlyNumbers = '^0*[1-9][0-9]*\d*$';
+        $scope.onlyNumbers = '^[1-9]\\d*$';
         $scope.backSelectHuntTools = backSelectHuntTools;
         $scope.threatHuntSchedule = threatHuntSchedule;
         $scope.backThreatHuntConfig = backThreatHuntConfig;
@@ -48,6 +48,10 @@
         $scope.finishInfoGraphics = widgetBasePath + 'images/finish.png';
         $scope.widgetCSS = widgetBasePath + 'widgetAssets/wizard-style.css';
         $scope.activeTab = 0;
+        $scope.ingestionDetails = {
+            "name": "Outbreak-Alerts",
+            "playbook_uuid": "70d2c10e-50d4-43ce-b606-0f0d0d305fad"
+        }
         $controller('BaseConnectorCtrl', {
             $scope: $scope
         });
@@ -228,12 +232,25 @@
                     }
                 ]
             };
-            $resource(API.QUERY + 'solutionpacks').save({ $limit: ALL_RECORDS_SIZE }, queryBody).$promise.then(function (response) {
-                if (response['hydra:member'] || response['hydra:member'].length > 0) {
-                    var huntToolDetails = _.map(response['hydra:member'], obj => _.pick(obj, ['name', 'label', 'version', 'uuid']));
-                    _loadConnectorDetails(huntToolDetails[0].name, huntToolDetails[0].version, huntToolDetails[0]);
-                }
-            });
+            $resource(API.QUERY + 'solutionpacks').save({ $limit: ALL_RECORDS_SIZE }, queryBody).$promise
+                .then(function (response) {
+                    if (Array.isArray(response['hydra:member']) && response['hydra:member'].length > 0) {
+                        var huntToolDetails = _.map(response['hydra:member'], obj => {
+                            return _.pick(obj, ['name', 'label', 'version', 'uuid']);
+                        });
+
+                        if (huntToolDetails.length > 0) {
+                            _loadConnectorDetails(huntToolDetails[0].name, huntToolDetails[0].version, huntToolDetails[0]);
+                        } else {
+                            console.error('No hunt tool details available');
+                        }
+                    } else {
+                        console.error('No data found in response[\'hydra:member\']');
+                    }
+                })
+                .catch(function (error) {
+                    console.error('An error occurred:', error);
+                });
         }
 
         function _loadConnectorDetails(connectorName, connectorVersion, sourceControl) {
@@ -390,6 +407,8 @@
                 return;
             }
             WizardHandler.wizard('OutbreaksolutionpackWizard').next();
+            triggerPlaybook();
+
         }
 
         function threatHuntSchedule(scheduleForm) {
@@ -400,7 +419,6 @@
                 return;
             }
             WizardHandler.wizard('OutbreaksolutionpackWizard').next();
-            triggerPlaybook();
         }
 
         function backStartPage() {
@@ -416,8 +434,8 @@
         }
 
         function backThreatHuntConfig() {
-            var selectedHuntTool = $scope.selectedEnv.huntTools[0].itemValue;
-            loadActiveTab(1, selectedHuntTool);
+            var selectedHuntTool = $scope.selectedEnv.huntTools[0];
+            loadActiveTab(0, selectedHuntTool);
             WizardHandler.wizard('OutbreaksolutionpackWizard').previous();
         }
 
@@ -536,7 +554,17 @@
                         SIXTH_PAGE_BACK: widgetUtilityService.translate('outbreakAlertConfiguration.SIXTH_PAGE_BACK'),
                         SIXTH_PAGE_NEXT: widgetUtilityService.translate('outbreakAlertConfiguration.SIXTH_PAGE_NEXT'),
 
+                        DIRECTIVE_MESSAGE_1: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_MESSAGE_1'),
+                        DIRECTIVE_NO_OPTION: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_NO_OPTION'),
+                        DIRECTIVE_YES_OPTION: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_YES_OPTION'),
+                        DIRECTIVE_SCHEDULE_MESSAGE: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_SCHEDULE_MESSAGE'),
+                        DIRECTIVE_TIME_BY: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_TIME_BY'),
                         DIRECTIVE_CRON_VALUE: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_CRON_VALUE'),
+                        DIRECTIVE_CRON_VALUE_HR: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_CRON_VALUE_HR'),
+                        DIRECTIVE_CRON_VALUE_DAILY: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_CRON_VALUE_DAILY'),
+                        DIRECTIVE_CRON_VALUE_WEEKLY: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_CRON_VALUE_WEEKLY'),
+                        DIRECTIVE_CRON_VALUE_MONTHLY: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_CRON_VALUE_MONTHLY'),
+                        DIRECTIVE_CRON_VALUE_YEARLY: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_CRON_VALUE_YEARLY'),
                         DIRECTIVE_MINUTE_LABEL: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_MINUTE_LABEL'),
                         DIRECTIVE_HOUR_LABEL: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_HOUR_LABEL'),
                         DIRECTIVE_MONTH_DAY_LABEL: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_MONTH_DAY_LABEL'),
