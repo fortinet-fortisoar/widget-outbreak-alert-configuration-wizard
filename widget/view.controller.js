@@ -15,7 +15,7 @@
             $scope: $scope
         });
         $scope.processingPicklist = false;
-        $scope.hutparams = {};
+        $scope.huntparams = {};
         $scope.isConnectorHealthy = false;
         $scope.processingConnector = false;
         $scope.selectHuntTool = selectHuntTool;
@@ -160,23 +160,23 @@
 
         function _activeErrorTab(tabName, tabIndex) {
             $scope.params.activeTab = CommonUtils.isUndefined(tabIndex) ? 0 : tabIndex;
-            if (CommonUtils.getObjectLength($scope.hutparams) === 0) {
+            if (CommonUtils.getObjectLength($scope.huntparams) === 0) {
                 var formParams = {};
                 for (let key in $scope.formHolder.connectorForm.$$parentForm) {
                     if (!key.startsWith("$") && key.indexOf('.') === -1) {
                         formParams[key] = $scope.formHolder.connectorForm.$$parentForm[key];
                         for (let k in formParams[key]) {
                             if (!k.startsWith("$") && k.indexOf('.') === -1) {
-                                $scope.hutparams[k] = formParams[key][k];
+                                $scope.huntparams[k] = formParams[key][k];
                             }
                         }
                     }
                 }
             }
-            for (let k in $scope.hutparams) {
-                if ($scope.hutparams[k].$valid === false) {
-                    $scope.hutparams[k].$touched = true;
-                    $scope.hutparams[k].$invalid = true;
+            for (let k in $scope.huntparams) {
+                if ($scope.huntparams[k].$valid === false) {
+                    $scope.huntparams[k].$touched = true;
+                    $scope.huntparams[k].$invalid = true;
                 }
             }
         }
