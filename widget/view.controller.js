@@ -16,7 +16,7 @@
         });
         $scope.processingPicklist = false;
         $scope.huntparams = {};
-        $scope.isConnectorHealthy = false;
+        $scope.isConnectorsHealthy = false;
         $scope.processingConnector = false;
         $scope.selectHuntTool = selectHuntTool;
         $scope.triggerAutoInstallOutbreaksPlaybook = triggerAutoInstallOutbreaksPlaybook;
@@ -33,6 +33,7 @@
         $scope.saveConnector = saveConnector;
         $scope.loadActiveTab = loadActiveTab;
         $scope.toggle = [];
+        $scope.configPlaybookTaskID = '';
         $scope.toggleRemediation = true;
         $scope.toggleConnectorConfig = [];
         $scope.connectorHealthStatus = [];
@@ -80,7 +81,6 @@
 
         $scope.parent_wf_id = '';
         var subscription;
-        initWebsocket();
 
         $scope.$on('websocket:reconnect', function () {
             initWebsocket();
@@ -98,7 +98,7 @@
                         $scope.taskId = undefined;
                     }
                 }
-                if (data.status === 'failed' || data.status === 'finished with error' || data.status === 'finished') {
+                if ((data.status === 'failed' || data.status === 'finished with error' || data.status === 'finished') && $scope.configPlaybookTaskID === data.task_id) {
                     getPlaybookResult();
                 }
             }).then(function (data) {
@@ -437,7 +437,7 @@
                 });
                 return;
             } else {
-                $scope.isConnectorHealthy = true;
+                $scope.isConnectorsHealthy = true;
                 // Array to hold all promises
                 let promises = [];
 
@@ -497,7 +497,7 @@
                 Promise.all(promises)
                     .then(() => {
                         // After all promises are resolved, evaluate the condition
-                        $scope.isConnectorHealthy = false;
+                        $scope.isConnectorsHealthy = false;
                         let indices = _.map(_.filter($scope.connectorHealthStatus, value => value === false), (value, index) => $scope.connectorHealthStatus.indexOf(value, index));
                         const notConfigConnectors = _.uniq(indices).map(index => $scope.selectedEnv.huntTools[index]);
                         const toasterMessage = 'Connector ' + notConfigConnectors.join(', ') + ' is not configured';
@@ -529,6 +529,7 @@
                 installationForm.notificationForm.fromEmailAddress.$dirty = true;
                 return;
             }
+            initWebsocket();
             triggerPlaybook();
         }
 
@@ -571,6 +572,7 @@
             }
             var queryUrl = API.MANUAL_TRIGGER + '906d2c36-8c7e-4fb6-ba06-6311fbefcf02';
             $http.post(queryUrl, queryPayload).then(function (response) {
+                $scope.configPlaybookTaskID = response.data.task_id;
                 console.log(response);
             });
         }
