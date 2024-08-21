@@ -16,7 +16,7 @@
         });
         $scope.processingPicklist = false;
         $scope.hutparams = {};
-        $scope.isConnectorsHealthy = false;
+        $scope.isConnectorHealthy = false;
         $scope.processingConnector = false;
         $scope.selectHuntTool = selectHuntTool;
         $scope.triggerAutoInstallOutbreaksPlaybook = triggerAutoInstallOutbreaksPlaybook;
@@ -437,7 +437,7 @@
                 });
                 return;
             } else {
-                $scope.isConnectorsHealthy = true;
+                $scope.isConnectorHealthy = true;
                 // Array to hold all promises
                 let promises = [];
 
@@ -497,7 +497,7 @@
                 Promise.all(promises)
                     .then(() => {
                         // After all promises are resolved, evaluate the condition
-                        $scope.isConnectorsHealthy = false;
+                        $scope.isConnectorHealthy = false;
                         let indices = _.map(_.filter($scope.connectorHealthStatus, value => value === false), (value, index) => $scope.connectorHealthStatus.indexOf(value, index));
                         const notConfigConnectors = _.uniq(indices).map(index => $scope.selectedEnv.huntTools[index]);
                         const toasterMessage = 'Connector ' + notConfigConnectors.join(', ') + ' is not configured';
