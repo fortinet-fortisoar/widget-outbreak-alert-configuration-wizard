@@ -1,6 +1,6 @@
 {
     "outbreakAlertConfiguration": {
-        "LABEL_TITLE":"Outbreak Response Framework Configuration Wizard",
+        "LABEL_TITLE":"Outbreak Response Framework Configuration",
         "START_PAGE_WZ_TITLE": "Start",
         "START_PAGE_TITLE":"Welcome",
         "START_PAGE_DISCRIPTION": "Get ready to enhance your threat detection and response capabilities with FortiSOAR's Outbreak Alert Monitoring and Investigation setup wizard. This guided setup will assist you in selecting and configuring threat detection integrations, as well as defining investigation schedules. The wizard also automates the installation of new Outbreak Alerts tailored to selected severity levels, with built-in email notifications for top-notch protection.",
@@ -53,10 +53,10 @@
         "FIFTH_PAGE_SECTION_1_DISCRIPTION_1": "Select the severity levels of the outbreaks for installation.",
         "FIFTH_PAGE_SECTION_1_DISCRIPTION_2": "Once a new or an updated outbreaks becomes available, the framework installs it automatically.",
         "FIFTH_PAGE_SECTION_2_TITLE": "Outbreak Alert Update Notification",
-        "FIFTH_PAGE_SECTION_2_DISCRIPTION": "Specify email addresses authorized to receive outbreaks updates. You can specify multiple email addresses separated by a semicolon (,).",
+        "FIFTH_PAGE_SECTION_2_DISCRIPTION": "Specify email addresses authorized to receive outbreaks updates. You can specify multiple email addresses separated by a comma (,).",
         "FIFTH_PAGE_SECTION_2_EMAIL": "Email Address",
         "FIFTH_PAGE_SECTION_2_EMAIL_TOOLTIP": "Enter a comma separated list of email IDs to whom you want to send the updates of outbreak alerts",
-        "FIFTH_PAGE_SECTION_2_EMAIL_VALIDATION": "This field is required.",
+        "FIFTH_PAGE_SECTION_2_EMAIL_VALIDATION": "This field is required and only comma separated list of email IDs are allowed.",
         "FIFTH_PAGE_BACK": "Back",
         "FIFTH_PAGE_NEXT": "Next",
 
