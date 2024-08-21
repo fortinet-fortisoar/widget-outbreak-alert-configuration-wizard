@@ -53,6 +53,7 @@
         $scope.finishInfoGraphics = widgetBasePath + 'images/finish.png';
         $scope.widgetCSS = widgetBasePath + 'widgetAssets/wizard-style.css';
         $scope.params = { activeTab: 0 };
+        const nistConnectorName = 'NIST National Vulnerability Database';
 
         $scope.ingestionDetails = {
             "name": "Outbreak-Alerts",
@@ -199,8 +200,8 @@
             };
             $resource(API.QUERY + 'keys').save(queryString, queryBody).$promise.then(function (response) {
                 if (response['hydra:member'] && response['hydra:member'].length > 0) {
-                    if ($scope.selectedEnv.huntTools[0] !== "NIST National Vulnerability Database") {
-                        $scope.selectedEnv.huntTools.splice(0, 0, "NIST National Vulnerability Database");
+                    if ($scope.selectedEnv.huntTools[0] !== nistConnectorName) {
+                        $scope.selectedEnv.huntTools.splice(0, 0, nistConnectorName);
                     }
                     $scope.threatHuntToolsParams = response['hydra:member'][0].jSONValue;
                     for (let index = 0; index < $scope.selectedEnv.huntTools.length; index++) {
@@ -248,7 +249,7 @@
                     $scope.processingPicklist = false;
                     $scope.huntToolsMapping = response['hydra:member'][0].jSONValue;
                     $scope.threatHuntTools = Object.keys($scope.huntToolsMapping).sort();
-                    const index = $scope.threatHuntTools.indexOf("NIST National Vulnerability Database");
+                    const index = $scope.threatHuntTools.indexOf(nistConnectorName);
                     if (index !== -1) {
                         $scope.threatHuntTools.splice(index, 1);
                     }
@@ -437,89 +438,93 @@
                 });
                 return;
             } else {
-                $scope.isConnectorsHealthy = true;
-                // Array to hold all promises
-                let promises = [];
+                _checkConnectoHelath();
+            }
+        }
 
-                for (let index = 0; index < $scope.selectedEnv.huntTools.length; index++) {
-                    let huntToolName = _.get($scope.huntToolsMapping, $scope.selectedEnv.huntTools[index]);
-                    let queryBody = {
-                        "logic": "AND",
-                        "filters": [
-                            {
-                                "field": "name",
-                                "operator": "in",
-                                "value": huntToolName
-                            }
-                        ]
-                    };
+        function _checkConnectoHelath() {
+            $scope.isConnectorsHealthy = true;
+            // Array to hold all promises
+            let promises = [];
 
-                    // Create a promise for each API call
-                    let promise = $resource(API.QUERY + 'solutionpacks').save({ $limit: ALL_RECORDS_SIZE }, queryBody).$promise
-                        .then(function (response) {
-                            if (Array.isArray(response['hydra:member']) && response['hydra:member'].length > 0) {
-                                let huntToolDetails = _.map(response['hydra:member'], obj => _.pick(obj, ['name', 'label', 'version', 'uuid']));
-                                return connectorService.getConnector(huntToolDetails[0].name, huntToolDetails[0].version)
-                                    .then(function (connector) {
-                                        if (!connector) {
-                                            toaster.error({
-                                                body: 'The Connector "' + huntToolDetails[0].name + '" is not installed. Install the connector and re-run this wizard to complete the configuration'
-                                            });
-                                            return Promise.reject('Connector not installed');
-                                        }
-                                        return marketplaceService.getContentDetails(API.BASE + 'solutionpacks/' + huntToolDetails[0].uuid + '?$relationships=true')
-                                            .then(function (response) {
-                                                $scope.contentDetail = response.data;
-                                                if (connector.configuration.length > 0) {
-                                                    $scope.isConnectorConfigured = true;
-                                                    return connectorService.getConnectorHealth(response.data, connector.configuration[0].config_id, connector.configuration[0].agent)
-                                                        .then(function (data) {
-                                                            if (data.status === "Available") {
-                                                                $scope.connectorHealthStatus[index] = true;
-                                                            }
-                                                        });
-                                                } else {
-                                                    $scope.isConnectorConfigured = false;
-                                                }
-                                            });
-                                    });
-                            } else {
-                                console.error('No data found in response[\'hydra:member\']');
-                            }
-                        })
-                        .catch(function (error) {
-                            console.error('An error occurred:', error);
-                        });
-                    // Add the promise to the array
-                    promises.push(promise);
-                }
-                // Use Promise.all to wait for all promises to complete
-                Promise.all(promises)
-                    .then(() => {
-                        // After all promises are resolved, evaluate the condition
-                        $scope.isConnectorsHealthy = false;
-                        let indices = _.map(_.filter($scope.connectorHealthStatus, value => value === false), (value, index) => $scope.connectorHealthStatus.indexOf(value, index));
-                        const notConfigConnectors = _.uniq(indices).map(index => $scope.selectedEnv.huntTools[index]);
-                        const toasterMessage = 'Connector ' + notConfigConnectors.join(', ') + ' is not configured';
-                        if (notConfigConnectors.length === 0) {
-                            $scope.selectedEnv.installOutbreakType = $scope.outbreakAlertSeverityList.slice();
-                            WizardHandler.wizard('OutbreaksolutionpackWizard').next();
+            for (let index = 0; index < $scope.selectedEnv.huntTools.length; index++) {
+                let huntToolName = _.get($scope.huntToolsMapping, $scope.selectedEnv.huntTools[index]);
+                let queryBody = {
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "field": "name",
+                            "operator": "in",
+                            "value": huntToolName
+                        }
+                    ]
+                };
+
+                // Create a promise for each API call
+                let promise = $resource(API.QUERY + 'solutionpacks').save({ $limit: ALL_RECORDS_SIZE }, queryBody).$promise
+                    .then(function (response) {
+                        if (Array.isArray(response['hydra:member']) && response['hydra:member'].length > 0) {
+                            let huntToolDetails = _.map(response['hydra:member'], obj => _.pick(obj, ['name', 'label', 'version', 'uuid']));
+                            return connectorService.getConnector(huntToolDetails[0].name, huntToolDetails[0].version)
+                                .then(function (connector) {
+                                    if (!connector) {
+                                        toaster.error({
+                                            body: 'The Connector "' + huntToolDetails[0].name + '" is not installed. Install the connector manually and re-run this wizard to complete the configuration'
+                                        });
+                                        return Promise.reject('Connector not installed');
+                                    }
+                                    return marketplaceService.getContentDetails(API.BASE + 'solutionpacks/' + huntToolDetails[0].uuid + '?$relationships=true')
+                                        .then(function (response) {
+                                            $scope.contentDetail = response.data;
+                                            if (connector.configuration.length > 0) {
+                                                $scope.isConnectorConfigured = true;
+                                                return connectorService.getConnectorHealth(response.data, connector.configuration[0].config_id, connector.configuration[0].agent)
+                                                    .then(function (data) {
+                                                        if (data.status === "Available") {
+                                                            $scope.connectorHealthStatus[index] = true;
+                                                        }
+                                                    });
+                                            } else {
+                                                $scope.isConnectorConfigured = false;
+                                            }
+                                        });
+                                });
                         } else {
-                            var huntToolIndex = $scope.selectedEnv.huntTools.indexOf(notConfigConnectors[0]);
-                            $scope.params.activeTab = huntToolIndex;
-                            loadActiveTab(huntToolIndex, notConfigConnectors[0]);
-                            var connectorConfig = document.getElementById('accordion-connector-config-' + huntToolIndex);
-                            connectorConfig.childNodes[2].classList.add('in');
-                            toggleConnectorConfigSettings(huntToolIndex);
-                            toaster.error({
-                                body: toasterMessage
-                            });
+                            console.error('No data found in response[\'hydra:member\']');
                         }
                     })
-                    .catch(error => {
-                        console.error('An error occurred in Promise.all:', error);
+                    .catch(function (error) {
+                        console.error('An error occurred:', error);
                     });
+                // Add the promise to the array
+                promises.push(promise);
             }
+            // Use Promise.all to wait for all promises to complete
+            Promise.all(promises)
+                .then(() => {
+                    // After all promises are resolved, evaluate the condition
+                    $scope.isConnectorsHealthy = false;
+                    let indices = _.map(_.filter($scope.connectorHealthStatus, value => value === false), (value, index) => $scope.connectorHealthStatus.indexOf(value, index));
+                    const notConfigConnectors = _.uniq(indices).map(index => $scope.selectedEnv.huntTools[index]);
+                    const toasterMessage = 'Connector ' + notConfigConnectors.join(', ') + ' is not configured';
+                    if (notConfigConnectors.length === 0) {
+                        $scope.selectedEnv.installOutbreakType = $scope.outbreakAlertSeverityList.slice();
+                        WizardHandler.wizard('OutbreaksolutionpackWizard').next();
+                    } else {
+                        var huntToolIndex = $scope.selectedEnv.huntTools.indexOf(notConfigConnectors[0]);
+                        $scope.params.activeTab = huntToolIndex;
+                        loadActiveTab(huntToolIndex, notConfigConnectors[0]);
+                        var connectorConfig = document.getElementById('accordion-connector-config-' + huntToolIndex);
+                        connectorConfig.childNodes[2].classList.add('in');
+                        toggleConnectorConfigSettings(huntToolIndex);
+                        toaster.error({
+                            body: toasterMessage
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('An error occurred in Promise.all:', error);
+                });
         }
 
         function moveToFinish(installationForm) {
@@ -552,7 +557,7 @@
         }
 
         function backSelectHuntTools() {
-            const index = $scope.selectedEnv.huntTools.indexOf("NIST National Vulnerability Database");
+            const index = $scope.selectedEnv.huntTools.indexOf(nistConnectorName);
             if (index !== -1) {
                 $scope.selectedEnv.huntTools.splice(index, 1);
             }
