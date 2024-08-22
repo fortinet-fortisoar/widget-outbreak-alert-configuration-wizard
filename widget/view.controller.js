@@ -438,11 +438,11 @@
                 });
                 return;
             } else {
-                _checkConnectorHelath();
+                _checkConnectorHealth();
             }
         }
 
-        function _checkConnectorHelath() {
+        function _checkConnectorHealth() {
             $scope.isConnectorsHealthy = true;
             // Array to hold all promises
             let promises = [];
