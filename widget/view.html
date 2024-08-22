@@ -97,7 +97,7 @@
           <div class="display-table fixed-table-layout full-height full-width">
             <div class="full-height display-table-cell vertical-align-middle">
               <div class="display-flex full-width overflow-auto solutionpack-wizard-modal-body wz-step-height">
-                <uib-tabset active="activeTab" class="margin-top-11 width-100pt">
+                <uib-tabset active="params.activeTab" class="margin-top-11 width-100pt">
                   <uib-tab data-ng-repeat="huntTool in selectedEnv.huntTools track by $index" index="$index"
                     heading="{{ huntTool }}" data-ng-click="loadActiveTab($index ,huntTool)">
                     <div class="container full-width">
@@ -111,7 +111,7 @@
                           {{viewWidgetVars.THIRD_PAGE_TITLE}}{{ huntTool }}</div>
                         <div class="form-group">
                           <uib-accordion>
-                            <div uib-accordion-group class="panel-default">
+                            <div uib-accordion-group id="accordion-connector-config-{{ $index }}" class="panel-default" is-open="true">
                               <uib-accordion-heading>
                                 <div ng-click="toggleConnectorConfigSettings($index)"
                                   data-ng-class="{'queue-text-active-color': toggleConnectorConfig[$index]}">
@@ -203,7 +203,7 @@
                                     </div>
                                   </div>
                                   <div class="clearfix"></div>
-                                </div>
+                                </div>  
                               </div>
                               <hr class="margin-0">
                               <div ng-form="formHolder.connectorForm" name="formHolder.connectorForm">
@@ -224,9 +224,9 @@
                             </div>
                           </uib-accordion>
                         </div>
-                        <div class="form-group">
+                        <div data-ng-if="huntTool!=='NIST National Vulnerability Database'" class="form-group">
                           <uib-accordion>
-                            <div uib-accordion-group class="panel-default" is-open="true">
+                            <div uib-accordion-group class="panel-default">
                               <uib-accordion-heading>
                                 <div ng-click="toggleAdvancedSettings($index)"
                                   data-ng-class="{'queue-text-active-color': toggle[$index]}">
@@ -308,8 +308,9 @@
             class="fa fa-chevron-left margin-right-sm"></i>{{viewWidgetVars.THIRD_PAGE_BACK}}</button>
         <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg"
           data-ng-click="nextNotification(threatHuntConfigForm)"
+          data-ng-disabled="isConnectorsHealthy"
           id="solutionpack-configure-env-next-btn">{{viewWidgetVars.THIRD_PAGE_NEXT}}<i
-            class="fa fa-chevron-right margin-left-sm"></i>
+            class="fa margin-left-sm" data-ng-class="isConnectorsHealthy ? 'fa-spin fa-spinner' : 'fa-chevron-right'"></i>
         </button>
       </div>
     </form>
@@ -446,15 +447,15 @@
                         <span>{{viewWidgetVars.FIFTH_PAGE_SECTION_2_DISCRIPTION}}</span>
                       </p>
                       <div class="form-group"
-                        data-ng-class="{'has-error': installationForm.notificationForm.fromEmailAddressa.$touched && installationForm.notificationForm.fromEmailAddressa.$invalid }">
-                        <label for="fromEmailAddressa" class="control-label">{{viewWidgetVars.FIFTH_PAGE_SECTION_2_EMAIL
+                        data-ng-class="{'has-error': installationForm.notificationForm.fromEmailAddress.$touched && installationForm.notificationForm.fromEmailAddress.$invalid }">
+                        <label for="fromEmailAddress" class="control-label">{{viewWidgetVars.FIFTH_PAGE_SECTION_2_EMAIL
                           }} <span data-uib-tooltip="{{viewWidgetVars.FIFTH_PAGE_SECTION_2_EMAIL_TOOLTIP}}"
                             data-tooltip-append-to-body="true" class="text-danger"><i
                               class="icon icon-information"></i>*</span></label>
-                        <input id="fromEmailAddressa" type="text" class="form-control input-sm" name="fromEmailAddressa"
-                          data-ng-model="selectedEnv.emailAddress" required>
+                        <input id="fromEmailAddress" type="text" class="form-control input-sm" name="fromEmailAddress"
+                          data-ng-model="selectedEnv.emailAddress" cs-email required>
                         <div
-                          data-ng-show="installationForm.notificationForm.fromEmailAddressa.$touched && installationForm.notificationForm.fromEmailAddressa.$error.required">
+                          data-ng-show="installationForm.notificationForm.fromEmailAddress.$touched && installationForm.notificationForm.fromEmailAddress.$error.required">
                           <span class="text-danger">{{viewWidgetVars.FIFTH_PAGE_SECTION_2_EMAIL_VALIDATION}}</span>
                         </div>
                       </div>
@@ -472,9 +473,9 @@
             class="fa fa-chevron-left margin-right-sm"></i>{{viewWidgetVars.FIFTH_PAGE_BACK}}</button>
         <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg"
           data-ng-click="moveToFinish(installationForm)"
-          data-ng-disabled="(selectedEnv.installOutbreakType && selectedEnv.installOutbreakType.length === 0)"
-          id="solutionpack-configure-env-next-btn">{{viewWidgetVars.FIFTH_PAGE_NEXT}}<i
-            class="fa fa-chevron-right margin-left-sm"></i>
+          data-ng-disabled="(selectedEnv.installOutbreakType && selectedEnv.installOutbreakType.length === 0 && isPlaybookExecuted)"
+          id="solutionpack-investigation-btn">{{viewWidgetVars.FIFTH_PAGE_NEXT}}<i
+            class="fa margin-left-sm" data-ng-class="isPlaybookExecuted ? 'fa-spin fa-spinner' : 'fa-chevron-right'"></i>
         </button>
       </div>
     </form>
@@ -490,13 +491,6 @@
             </div>
             <div class="col-md-6 prerequisites-section padding-bottom-25 padding-left-0">
               <div class="font-size-30 muted-80 line-height-1">{{viewWidgetVars.SIXTH_PAGE_TITLE}}</div><br />
-              <div
-                class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
-                <p class="font-size-13 margin-bottom-0 muted">{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_1}}</p>
-                <p class="font-size-13 margin-bottom-0 muted">{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_1}}<a
-                    data-ng-click="close()">'{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_2}}'</a>{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_3}}
-                </p>
-              </div>
               <div
                 class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
                 <div class="data-ingestion-summary padding-top-lg">
@@ -532,6 +526,13 @@
                       class="icon icon-trigger margin-right-sm"></i>{{viewWidgetVars.SIXTH_PAGE_AUTO_INSTALL_BUTTON_LABEL}}</button>
                 </div>
               </div>
+              <div
+              class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
+              <p class="font-size-13 margin-bottom-0 muted">{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_1}}</p>
+              <p class="font-size-13 margin-bottom-0 muted">{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_1}}<a
+                  data-ng-click="close()">'{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_2}}'</a>{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_3}}
+              </p>
+            </div>
             </div>
           </div>
         </div>
