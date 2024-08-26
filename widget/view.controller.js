@@ -31,6 +31,7 @@
         $scope.moveToFinish = moveToFinish;
         $scope.close = close;
         $scope.saveConnector = saveConnector;
+        $scope.threatHuntConfigurationChanged = threatHuntConfigurationChanged;
         $scope.loadActiveTab = loadActiveTab;
         $scope.toggle = [];
         $scope.configPlaybookTaskID = '';
@@ -54,11 +55,14 @@
         $scope.widgetCSS = widgetBasePath + 'widgetAssets/wizard-style.css';
         $scope.params = { activeTab: 0 };
         const nistConnectorName = 'NIST National Vulnerability Database';
-
         $scope.ingestionDetails = {
             "name": "Outbreak-Alerts",
             "playbook_uuid": "70d2c10e-50d4-43ce-b606-0f0d0d305fad"
         }
+        $scope.selected = {
+            configuration: null,
+            params: {}
+        };
         $controller('BaseConnectorCtrl', {
             $scope: $scope
         });
@@ -145,16 +149,17 @@
             if (CommonUtils.isUndefined(tabIndex)) {
                 var selectedHuntTool = $scope.selectedEnv.huntTools[0];
                 var huntToolName = _.get($scope.huntToolsMapping, selectedHuntTool);
-                if ($scope.formHolder.connectorForm && $scope.formHolder.connectorForm.$dirty) {
-                    $scope.formHolder.connectorForm.$dirty = false;
+                if (CommonUtils.isUndefined($scope.params.activeTab)) {
+                    $scope.params = {
+                        activeTab: 0
+                    }
                 }
                 _fetchConnectorConfig(huntToolName, $scope.params.activeTab);
+
+
             }
             else {
                 var huntToolName = _.get($scope.huntToolsMapping, tabName);
-                if ($scope.formHolder.connectorForm && $scope.formHolder.connectorForm.$dirty) {
-                    $scope.formHolder.connectorForm.$dirty = false;
-                }
                 _fetchConnectorConfig(huntToolName, tabIndex);
             }
         }
@@ -163,9 +168,9 @@
             $scope.params.activeTab = CommonUtils.isUndefined(tabIndex) ? 0 : tabIndex;
             if (CommonUtils.getObjectLength($scope.huntparams) === 0) {
                 var formParams = {};
-                for (let key in $scope.formHolder.connectorForm.$$parentForm) {
+                for (let key in $scope.formHolder.connectorForm[tabIndex].$$parentForm) {
                     if (!key.startsWith("$") && key.indexOf('.') === -1) {
-                        formParams[key] = $scope.formHolder.connectorForm.$$parentForm[key];
+                        formParams[key] = $scope.formHolder.connectorForm[tabIndex].$$parentForm[key];
                         for (let k in formParams[key]) {
                             if (!k.startsWith("$") && k.indexOf('.') === -1) {
                                 $scope.huntparams[k] = formParams[key][k];
@@ -328,7 +333,7 @@
             });
         }
 
-        function saveConnector(saveFrom) {
+        function saveConnector(tabIndex, saveFrom) {
             $scope.isConnectorConfigured = true;
             $scope.configuredConnector = false;
             var data = angular.copy($scope.connector);
@@ -344,7 +349,7 @@
             newConfiguration = false;
             if (saveFrom !== 'deleteConfigAndSave') {
                 if (!_.isEmpty($scope.connector.config_schema)) {
-                    if (!$scope.validateConfigurationForm()) {
+                    if (!validateConfigurationForm(tabIndex)) {
                         return;
                     }
                 }
@@ -381,12 +386,12 @@
             $scope.processing = true;
             connectorService.updateConnectorConfig(updateData, newConfiguration, deleteConfig).then(function (response) {
                 if (newConfig) {
-                    $scope.connector.configuration.push(newConfig);
+                    $scope.connector.configuration.push(response);
                     if (newConfig.default) {
                         $scope.removeDefaultFromOthers();
                     }
                 }
-                $scope.formHolder.connectorForm.$setPristine();
+                $scope.formHolder.connectorForm[tabIndex].$setPristine();
                 if (!deleteConfig) {
                     $scope.input.selectedConfiguration.id = response.id;
                     $scope.configuredConnector = true;
@@ -403,6 +408,72 @@
             });
         }
 
+        function validateConfigurationForm(tabIndex) {
+            if ($scope.formHolder.connectorForm[tabIndex] && !$scope.formHolder.connectorForm[tabIndex].$valid) {
+                toaster.error({
+                    body: 'Please fix the highlighted errors.'
+                });
+                $scope.formHolder.connectorForm[tabIndex].$setTouched();
+                $scope.formHolder.connectorForm[tabIndex].$focusOnFirstError();
+                return false;
+            }
+            return true;
+        }
+
+        function threatHuntConfigurationChanged(tabIndex, configuration, enableAddConfig) {
+            $scope.formHolder.connectorForm[tabIndex].$setPristine();
+            $scope.input.selectedConfiguration = configuration;
+            $scope.selected.params = {};
+            if ($scope.input.oldSelectedConfiguration.uuid && !validateConfigurationForm(tabIndex)) {
+                $scope.input.selectedConfiguration = $scope.input.oldSelectedConfiguration;
+                return;
+            }
+            if (CommonUtils.isUndefined($scope.connector)) {
+                return;
+            }
+            if (CommonUtils.isUndefined(configuration)) {
+                let newConfigObject = angular.copy($scope.connector.newConfig);
+                newConfigObject.default = false;
+                $scope.input.selectedConfiguration = newConfigObject;
+            }
+            _updateSelectedConfig();
+            if (!enableAddConfig) {
+                $scope.enableAddConfig = false;
+            }
+            if (!$scope.selectedAgent) {
+                $scope.checkHealth(status);
+            } else {
+                $scope.checkIngestionEnable();
+            }
+            if ($scope.connector.configuration.length === 0) {
+                $scope.input.selectedConfiguration.default = true;
+            }
+            else {
+                let isDefault = false;
+                ($scope.connector.configuration).forEach(config => {
+                    if (config.default) {
+                        isDefault = true;
+                    }
+                });
+                if (!isDefault && CommonUtils.isUndefined($scope.selected.configuration)) {
+                    $scope.input.selectedConfiguration.default = true;
+                }
+            }
+            $scope.input.oldSelectedConfiguration = angular.copy($scope.input.selectedConfiguration);
+        }
+
+        function _updateSelectedConfig(update) {
+            $scope.selected.configuration = $scope.input.selectedConfiguration.id ? $scope.input.selectedConfiguration : null;
+            $scope.selected.params = {};
+            if (update) {
+                _.map(self.connector.configuration, function (connectorConfig) {
+                    if (connectorConfig.config_id === $scope.input.selectedConfiguration.config_id) {
+                        connectorConfig = self._.extend(connectorConfig, $scope.input.selectedConfiguration);
+                    }
+                });
+            }
+        }
+
         function backNotification() {
             WizardHandler.wizard('OutbreaksolutionpackWizard').previous();
         }
@@ -411,6 +482,13 @@
             if (!CommonUtils.isUndefined(threatHuntConfigForm.fazForm) && threatHuntConfigForm.fazForm.$invalid) {
                 var huntToolIndex = $scope.selectedEnv.huntTools.indexOf('Fortinet FortiAnalyzer');
                 _activeErrorTab('Fortinet FortiAnalyzer', huntToolIndex);
+                loadActiveTab(huntToolIndex, 'Fortinet FortiAnalyzer');
+                var paramsConfig = document.getElementById('accordion-params-config-' + huntToolIndex);
+                paramsConfig.childNodes[2].classList.add('in');
+                toggleAdvancedSettings(huntToolIndex);
+                var connectorConfig = document.getElementById('accordion-connector-config-' + huntToolIndex);
+                connectorConfig.childNodes[2].classList.replace('in', null);
+                toggleConnectorConfigSettings(huntToolIndex);
                 toaster.error({
                     body: 'Fortinet FortiAnalyzer Threat Hunt Tool parameters are required'
                 });
@@ -418,6 +496,13 @@
             } else if (!CommonUtils.isUndefined(threatHuntConfigForm.fsmForm) && threatHuntConfigForm.fsmForm.$invalid) {
                 var huntToolIndex = $scope.selectedEnv.huntTools.indexOf('Fortinet FortiSIEM');
                 _activeErrorTab('Fortinet FortiSIEM', huntToolIndex);
+                loadActiveTab(huntToolIndex, 'Fortinet FortiSIEM');
+                var paramsConfig = document.getElementById('accordion-params-config-' + huntToolIndex);
+                paramsConfig.childNodes[2].classList.add('in');
+                toggleAdvancedSettings(huntToolIndex);
+                var connectorConfig = document.getElementById('accordion-connector-config-' + huntToolIndex);
+                connectorConfig.childNodes[2].classList.replace('in', null);
+                toggleConnectorConfigSettings(huntToolIndex);
                 toaster.error({
                     body: 'Fortinet FortiSIEM Threat Hunt Tool parameters are required'
                 });
@@ -426,6 +511,13 @@
             else if (!CommonUtils.isUndefined(threatHuntConfigForm.qradarForm) && threatHuntConfigForm.qradarForm.$invalid) {
                 var huntToolIndex = $scope.selectedEnv.huntTools.indexOf('IBM QRadar');
                 _activeErrorTab('IBM QRadar', huntToolIndex);
+                loadActiveTab(huntToolIndex, 'IBM QRadar');
+                var paramsConfig = document.getElementById('accordion-params-config-' + huntToolIndex);
+                paramsConfig.childNodes[2].classList.add('in');
+                toggleAdvancedSettings(huntToolIndex);
+                var connectorConfig = document.getElementById('accordion-connector-config-' + huntToolIndex);
+                connectorConfig.childNodes[2].classList.replace('in', null);
+                toggleConnectorConfigSettings(huntToolIndex);
                 toaster.error({
                     body: 'IBM QRadar Threat Hunt Tool parameters are required'
                 });
@@ -433,6 +525,14 @@
             } else if (!CommonUtils.isUndefined(threatHuntConfigForm.splunkForm) && threatHuntConfigForm.splunkForm.$invalid) {
                 var huntToolIndex = $scope.selectedEnv.huntTools.indexOf('Splunk');
                 _activeErrorTab('Splunk', huntToolIndex);
+                loadActiveTab(huntToolIndex, 'Splunk');
+                var paramsConfig = document.getElementById('accordion-params-config-' + huntToolIndex);
+                paramsConfig.childNodes[2].classList.add('in');
+                toggleAdvancedSettings(huntToolIndex);
+                var connectorConfig = document.getElementById('accordion-connector-config-' + huntToolIndex);
+                connectorConfig.childNodes[2].classList.replace('in', null);
+                toggleConnectorConfigSettings(huntToolIndex);
+
                 toaster.error({
                     body: 'Splunk Threat Hunt Tool parameters are required'
                 });
@@ -475,9 +575,9 @@
                                     }
                                     return marketplaceService.getContentDetails(API.BASE + 'solutionpacks/' + huntToolDetails[0].uuid + '?$relationships=true')
                                         .then(function (response) {
-                                            $scope.contentDetail = response.data;
+                                            //$scope.contentDetail = response.data;
                                             if (connector.configuration.length > 0) {
-                                                $scope.isConnectorConfigured = true;
+                                                $scope.isConnectorsConfigured = true;
                                                 return connectorService.getConnectorHealth(response.data, connector.configuration[0].config_id, connector.configuration[0].agent)
                                                     .then(function (data) {
                                                         if (data.status === "Available") {
@@ -485,7 +585,7 @@
                                                         }
                                                     });
                                             } else {
-                                                $scope.isConnectorConfigured = false;
+                                                $scope.isConnectorsConfigured = false;
                                             }
                                         });
                                 });
@@ -517,6 +617,9 @@
                         var connectorConfig = document.getElementById('accordion-connector-config-' + huntToolIndex);
                         connectorConfig.childNodes[2].classList.add('in');
                         toggleConnectorConfigSettings(huntToolIndex);
+                        var paramsConfig = document.getElementById('accordion-params-config-' + huntToolIndex);
+                        paramsConfig.childNodes[2].classList.replace('in', null);
+                        toggleAdvancedSettings(huntToolIndex);
                         toaster.error({
                             body: toasterMessage
                         });
@@ -591,7 +694,7 @@
             var queryUrl = API.MANUAL_TRIGGER + '7d924203-e5e3-4ce5-b704-e8f3283c7b92';
             $http.post(queryUrl, queryPayload).then(function (response) {
                 toaster.success({
-                    body: 'Auto install oubtreak alert playbook triggered successfully.'
+                    body: 'Auto install Outbreak Alerts playbook triggered successfully.'
                 });
             });
         }

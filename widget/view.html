@@ -44,7 +44,7 @@
     </div>
   </wz-step>
   <wz-step wz-title="{{viewWidgetVars.SECOND_PAGE_WZ_TITLE}}" wz-order="2" class="ingestion-modal-padding">
-    <div class="full-width wz-step-height padding-bottom-md solutionpack-wizard-modal-body">
+    <div class="full-width full-height wz-step-height padding-bottom-md solutionpack-wizard-modal-body">
       <div class="full-height overflow-auto">
         <div class="display-table fixed-table-layout full-height full-width">
           <div class="full-height display-table-cell vertical-align-middle">
@@ -111,7 +111,8 @@
                           {{viewWidgetVars.THIRD_PAGE_TITLE}}{{ huntTool }}</div>
                         <div class="form-group">
                           <uib-accordion>
-                            <div uib-accordion-group id="accordion-connector-config-{{ $index }}" class="panel-default" is-open="true">
+                            <div uib-accordion-group id="accordion-connector-config-{{ $index }}" class="panel-default"
+                              is-open="true">
                               <uib-accordion-heading>
                                 <div ng-click="toggleConnectorConfigSettings($index)"
                                   data-ng-class="{'queue-text-active-color': toggleConnectorConfig[$index]}">
@@ -185,10 +186,11 @@
                                       <div class="mp-view-properties margin-top-sm">
                                         <div class="row">
                                           <div class="pull-right margin-right-sm">
-                                            <div data-ng-show="contentDetail.infoContent.help_online"
+                                            <div
+                                              data-ng-show="contentDetail.infoContent.help_online || contentDetail.infoContent.help"
                                               class="display-inline-block padding-top-xs">
                                               <a id="administration-links"
-                                                data-ng-show="contentDetail.infoContent.help_online"
+                                                data-ng-show="contentDetail.infoContent.help_online || contentDetail.infoContent.help"
                                                 href="{{contentDetail.infoContent.help_online || contentDetail.infoContent.help}}"
                                                 title="Visit for more details about this {{contentDetail.type}}"
                                                 target="_blank" rel="noopener noreferrer" class="btn btn-default">
@@ -203,22 +205,19 @@
                                     </div>
                                   </div>
                                   <div class="clearfix"></div>
-                                </div>  
+                                </div>
                               </div>
                               <hr class="margin-0">
-                              <div ng-form="formHolder.connectorForm" name="formHolder.connectorForm">
-                                <div data-ng-if="selectedConnector" id="outbreakConnectorWizard"
+                              <div ng-form="formHolder.connectorForm[$index]" name="formHolder.connectorForm[$index]">
+                                <div data-ng-if="selectedConnector" id="outbreakConnectorWizard-{{$index}}"
                                   class="margin-top-negative-20 margin-top-md padding-left-0 padding-right-0 connector-config-width"
-                                  data-ng-include="'app/settings/connectorConfig.html'">
+                                  data-ng-include="'widgets/installed/outbreakAlertConfiguration-2.0.0/widgetAssets/threatHuntIntegrationConfig.html'">
                                 </div>
                                 <div data-ng-show="selectedConnector" class="col-md-12 margin-top-18">
                                   <button type="button" class="btn btn-primary"
-                                    data-ng-disabled="!(formHolder.connectorForm.$valid && formHolder.connectorForm.$dirty)"
-                                    data-ng-click="saveConnector()" id="submit-github-config-add-btn"><i
+                                    data-ng-disabled="!(formHolder.connectorForm[$index].$valid && formHolder.connectorForm[$index].$dirty)"
+                                    data-ng-click="saveConnector($index)" id="submit-connector-config-{{$index}}"><i
                                       class="icon icon-check margin-right-sm"></i>Save</button>
-                                  <button type="button" class="btn btn-default" data-ng-disabled="processing"
-                                    data-ng-click="closeConfiguration()" id="cancel-github-config-add-btn"><i
-                                      class="icon icon-close margin-right-sm"></i>Cancel</button>
                                 </div>
                               </div>
                             </div>
@@ -226,7 +225,7 @@
                         </div>
                         <div data-ng-if="huntTool!=='NIST National Vulnerability Database'" class="form-group">
                           <uib-accordion>
-                            <div uib-accordion-group class="panel-default">
+                            <div uib-accordion-group id="accordion-params-config-{{ $index }}" class="panel-default">
                               <uib-accordion-heading>
                                 <div ng-click="toggleAdvancedSettings($index)"
                                   data-ng-class="{'queue-text-active-color': toggle[$index]}">
@@ -307,10 +306,9 @@
           id="solutionpack-configure-back-env-btn" data-ng-click="backSelectHuntTools()"><i
             class="fa fa-chevron-left margin-right-sm"></i>{{viewWidgetVars.THIRD_PAGE_BACK}}</button>
         <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg"
-          data-ng-click="nextNotification(threatHuntConfigForm)"
-          data-ng-disabled="isConnectorsHealthy"
-          id="solutionpack-configure-env-next-btn">{{viewWidgetVars.THIRD_PAGE_NEXT}}<i
-            class="fa margin-left-sm" data-ng-class="isConnectorsHealthy ? 'fa-spin fa-spinner' : 'fa-chevron-right'"></i>
+          data-ng-click="nextNotification(threatHuntConfigForm)" data-ng-disabled="isConnectorsHealthy"
+          id="solutionpack-configure-env-next-btn">{{viewWidgetVars.THIRD_PAGE_NEXT}}<i class="fa margin-left-sm"
+            data-ng-class="isConnectorsHealthy ? 'fa-spin fa-spinner' : 'fa-chevron-right'"></i>
         </button>
       </div>
     </form>
@@ -336,16 +334,14 @@
                         <p class="font-Size-13 muted margin-auto">
                           <span>{{viewWidgetVars.FOURTH_PAGE_SECTION_1_DISCRIPTION}} <br /></span>
                         </p>
-                          <div class="align-items-center muted font-size-13 display-inline-flex">
-                            {{viewWidgetVars.FOURTH_PAGE_SECTION_1_PARAM_1}}&nbsp;
-                            <input type="text" class="padding-left-sm padding-right-sm width-100px form-control"
-                              id="timeFrameDays" name="timeFrameDays" 
-                              data-ng-init="selectedEnv.timeFrameDays = 30"
-                              data-ng-model="selectedEnv.timeFrameDays" 
-                              data-ng-pattern="onlyNumbers"
-                              autocomplete="off" data-ng-required="true" />&nbsp;
-                            {{viewWidgetVars.FOURTH_PAGE_SECTION_1_PARAM_2}}<span class="required text-danger">*</span>
-                          </div>                     
+                        <div class="align-items-center muted font-size-13 display-inline-flex">
+                          {{viewWidgetVars.FOURTH_PAGE_SECTION_1_PARAM_1}}&nbsp;
+                          <input type="text" class="padding-left-sm padding-right-sm width-100px form-control"
+                            id="timeFrameDays" name="timeFrameDays" data-ng-init="selectedEnv.timeFrameDays = 30"
+                            data-ng-model="selectedEnv.timeFrameDays" data-ng-pattern="onlyNumbers" autocomplete="off"
+                            data-ng-required="true" />&nbsp;
+                          {{viewWidgetVars.FOURTH_PAGE_SECTION_1_PARAM_2}}<span class="required text-danger">*</span>
+                        </div>
                         <div class="margin-left-25">
                           <div data-ng-show="scheduleForm.threatHuntWindowForm.timeFrameDays.$error.pattern"
                             class="font-size-12 ng-hide padding-left-120 text-danger">
@@ -474,8 +470,8 @@
         <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg"
           data-ng-click="moveToFinish(installationForm)"
           data-ng-disabled="(selectedEnv.installOutbreakType && selectedEnv.installOutbreakType.length === 0 && isPlaybookExecuted)"
-          id="solutionpack-investigation-btn">{{viewWidgetVars.FIFTH_PAGE_NEXT}}<i
-            class="fa margin-left-sm" data-ng-class="isPlaybookExecuted ? 'fa-spin fa-spinner' : 'fa-chevron-right'"></i>
+          id="solutionpack-investigation-btn">{{viewWidgetVars.FIFTH_PAGE_NEXT}}<i class="fa margin-left-sm"
+            data-ng-class="isPlaybookExecuted ? 'fa-spin fa-spinner' : 'fa-chevron-right'"></i>
         </button>
       </div>
     </form>
@@ -527,12 +523,12 @@
                 </div>
               </div>
               <div
-              class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
-              <p class="font-size-13 margin-bottom-0 muted">{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_1}}</p>
-              <p class="font-size-13 margin-bottom-0 muted">{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_1}}<a
-                  data-ng-click="close()">'{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_2}}'</a>{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_3}}
-              </p>
-            </div>
+                class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
+                <p class="font-size-13 margin-bottom-0 muted">{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_1}}</p>
+                <p class="font-size-13 margin-bottom-0 muted">{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_1}}<a
+                    data-ng-click="close()">'{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_2}}'</a>{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_3}}
+                </p>
+              </div>
             </div>
           </div>
         </div>
