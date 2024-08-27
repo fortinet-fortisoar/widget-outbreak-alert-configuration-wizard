@@ -18,10 +18,10 @@
       restrict: 'A',
       scope: {
         viewWidgetVars: '<',
-        jsonData: '=',
+        jsonData: '='
       },
       controller: 'BaseCtrl',
-      templateUrl: 'widgets/installed/outbreakAlertConfiguration-2.0.0/widgetAssets/schedulePlaybook.html',
+      templateUrl: 'widgets/installed/outbreakAlertConfiguration-2.0.0/widgetAssets/html/schedulePlaybook.html',
       link: link
     };
     function link(scope) {
@@ -118,6 +118,7 @@
           scope.cronDescriber = cronstrue.toString(scope.scheduleConfig.crontab.minute + ' ' + scope.scheduleConfig.crontab.hour + ' ' + scope.scheduleConfig.crontab.day_of_month + ' ' + scope.scheduleConfig.crontab.month_of_year + ' ' + scope.scheduleConfig.crontab.day_of_week);
         }
         scope.params.config.cronName = angular.copy(scope.cronDescriber);
+        scope.$emit('scheduleDetails', { 'status': true, 'scheduleId': scope.scheduleConfig.id, 'scheduleFrequency': scope.cronDescriber });
       }
 
       function loadScheduleData() {
@@ -129,7 +130,6 @@
           scope.params.form.scheduled = 'Y'
           if (response.data['hydra:member'] && response.data['hydra:member'].length > 0) {
             scope.scheduleConfig.id = response.data['hydra:member'][0].id;
-            scope.$emit('scheduleDetails', { 'status': true, 'scheduleId': scope.scheduleConfig.id, 'scheduleFrequency': scope.cronDescriber });
             scope.processingScheduleData = true;
             SchedulesService.loadScheduleDetails(scope.scheduleConfig.id).then(function (result) {
               scope.scheduleConfig = result;

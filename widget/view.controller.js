@@ -31,6 +31,7 @@
         $scope.moveToFinish = moveToFinish;
         $scope.close = close;
         $scope.saveConnector = saveConnector;
+        $scope.getDisplayHuntTools = getDisplayHuntTools;
         $scope.threatHuntConfigurationChanged = threatHuntConfigurationChanged;
         $scope.loadActiveTab = loadActiveTab;
         $scope.toggle = [];
@@ -52,7 +53,7 @@
         $scope.outbreakSettings = $scope.isLightTheme ? widgetBasePath + 'images/remediation-light.svg' : widgetBasePath + 'images/remediation-dark.svg';
         $scope.threatTuntSchedule = $scope.isLightTheme ? widgetBasePath + 'images/threat-hunt-schedule-light.svg' : widgetBasePath + 'images/threat-hunt-schedule-dark.svg';
         $scope.finishInfoGraphics = widgetBasePath + 'images/finish.png';
-        $scope.widgetCSS = widgetBasePath + 'widgetAssets/wizard-style.css';
+        $scope.widgetCSS = widgetBasePath + 'widgetAssets/css/wizard-style.css';
         $scope.params = { activeTab: 0 };
         const nistConnectorName = 'NIST National Vulnerability Database';
         $scope.ingestionDetails = {
@@ -123,11 +124,9 @@
             $http.get(endpoint).then(function (response) {
                 if (response.data.status === 'finished' || response.data.status === 'finished with error') {
                     WizardHandler.wizard('OutbreaksolutionpackWizard').next();
-                    $scope.isPlaybookExecuted = false;
+                    getDisplayHuntTools();
                 }
-                if (response.data.status === 'failed') {
-                    $scope.isPlaybookExecuted = false;
-                }
+                $scope.isPlaybookExecuted = false;
             });
         }
 
@@ -480,66 +479,37 @@
 
         function nextNotification(threatHuntConfigForm) {
             if (!CommonUtils.isUndefined(threatHuntConfigForm.fazForm) && threatHuntConfigForm.fazForm.$invalid) {
-                var huntToolIndex = $scope.selectedEnv.huntTools.indexOf('Fortinet FortiAnalyzer');
-                _activeErrorTab('Fortinet FortiAnalyzer', huntToolIndex);
-                loadActiveTab(huntToolIndex, 'Fortinet FortiAnalyzer');
-                var paramsConfig = document.getElementById('accordion-params-config-' + huntToolIndex);
-                paramsConfig.childNodes[2].classList.add('in');
-                toggleAdvancedSettings(huntToolIndex);
-                var connectorConfig = document.getElementById('accordion-connector-config-' + huntToolIndex);
-                connectorConfig.childNodes[2].classList.replace('in', null);
-                toggleConnectorConfigSettings(huntToolIndex);
-                toaster.error({
-                    body: 'Fortinet FortiAnalyzer Threat Hunt Tool parameters are required'
-                });
+                _connectorErrorHandling('Fortinet FortiAnalyzer');
                 return;
             } else if (!CommonUtils.isUndefined(threatHuntConfigForm.fsmForm) && threatHuntConfigForm.fsmForm.$invalid) {
-                var huntToolIndex = $scope.selectedEnv.huntTools.indexOf('Fortinet FortiSIEM');
-                _activeErrorTab('Fortinet FortiSIEM', huntToolIndex);
-                loadActiveTab(huntToolIndex, 'Fortinet FortiSIEM');
-                var paramsConfig = document.getElementById('accordion-params-config-' + huntToolIndex);
-                paramsConfig.childNodes[2].classList.add('in');
-                toggleAdvancedSettings(huntToolIndex);
-                var connectorConfig = document.getElementById('accordion-connector-config-' + huntToolIndex);
-                connectorConfig.childNodes[2].classList.replace('in', null);
-                toggleConnectorConfigSettings(huntToolIndex);
-                toaster.error({
-                    body: 'Fortinet FortiSIEM Threat Hunt Tool parameters are required'
-                });
-                return;
+                _connectorErrorHandling('SpFortinet FortiSIEMlunk');
+                return
             }
             else if (!CommonUtils.isUndefined(threatHuntConfigForm.qradarForm) && threatHuntConfigForm.qradarForm.$invalid) {
-                var huntToolIndex = $scope.selectedEnv.huntTools.indexOf('IBM QRadar');
-                _activeErrorTab('IBM QRadar', huntToolIndex);
-                loadActiveTab(huntToolIndex, 'IBM QRadar');
-                var paramsConfig = document.getElementById('accordion-params-config-' + huntToolIndex);
-                paramsConfig.childNodes[2].classList.add('in');
-                toggleAdvancedSettings(huntToolIndex);
-                var connectorConfig = document.getElementById('accordion-connector-config-' + huntToolIndex);
-                connectorConfig.childNodes[2].classList.replace('in', null);
-                toggleConnectorConfigSettings(huntToolIndex);
-                toaster.error({
-                    body: 'IBM QRadar Threat Hunt Tool parameters are required'
-                });
+                _connectorErrorHandling('IBM QRadar');
                 return;
             } else if (!CommonUtils.isUndefined(threatHuntConfigForm.splunkForm) && threatHuntConfigForm.splunkForm.$invalid) {
-                var huntToolIndex = $scope.selectedEnv.huntTools.indexOf('Splunk');
-                _activeErrorTab('Splunk', huntToolIndex);
-                loadActiveTab(huntToolIndex, 'Splunk');
-                var paramsConfig = document.getElementById('accordion-params-config-' + huntToolIndex);
-                paramsConfig.childNodes[2].classList.add('in');
-                toggleAdvancedSettings(huntToolIndex);
-                var connectorConfig = document.getElementById('accordion-connector-config-' + huntToolIndex);
-                connectorConfig.childNodes[2].classList.replace('in', null);
-                toggleConnectorConfigSettings(huntToolIndex);
-
-                toaster.error({
-                    body: 'Splunk Threat Hunt Tool parameters are required'
-                });
+                _connectorErrorHandling('Splunk');
                 return;
             } else {
                 _checkConnectorHealth();
             }
+
+        }
+
+        function _connectorErrorHandling(threatHuntTool) {
+            var huntToolIndex = $scope.selectedEnv.huntTools.indexOf(threatHuntTool);
+            _activeErrorTab(threatHuntTool, huntToolIndex);
+            loadActiveTab(huntToolIndex, threatHuntTool);
+            var paramsConfig = document.getElementById('accordion-params-config-' + huntToolIndex);
+            paramsConfig.childNodes[2].classList.add('in');
+            toggleAdvancedSettings(huntToolIndex);
+            var connectorConfig = document.getElementById('accordion-connector-config-' + huntToolIndex);
+            connectorConfig.childNodes[2].classList.replace('in', null);
+            toggleConnectorConfigSettings(huntToolIndex);
+            toaster.error({
+                body: threatHuntTool + ' Threat Hunt Tool parameters are required'
+            });
         }
 
         function _checkConnectorHealth() {
@@ -575,7 +545,6 @@
                                     }
                                     return marketplaceService.getContentDetails(API.BASE + 'solutionpacks/' + huntToolDetails[0].uuid + '?$relationships=true')
                                         .then(function (response) {
-                                            //$scope.contentDetail = response.data;
                                             if (connector.configuration.length > 0) {
                                                 $scope.isConnectorsConfigured = true;
                                                 return connectorService.getConnectorHealth(response.data, connector.configuration[0].config_id, connector.configuration[0].agent)
@@ -656,6 +625,10 @@
         }
 
         function backThreatHuntSchedule() {
+            $scope.isPlaybookExecuted = false;
+            if (subscription) {
+                websocketService.unsubscribe(subscription);
+            }
             WizardHandler.wizard('OutbreaksolutionpackWizard').previous();
         }
 
@@ -665,6 +638,10 @@
                 $scope.selectedEnv.huntTools.splice(index, 1);
             }
             WizardHandler.wizard('OutbreaksolutionpackWizard').previous();
+        }
+
+        function getDisplayHuntTools() {
+            $scope.displayHuntTools = (_.without($scope.selectedEnv.huntTools, 'NIST National Vulnerability Database')).join(', ');
         }
 
         function backThreatHuntConfig() {
@@ -757,13 +734,12 @@
 
                         FIFTH_PAGE_WZ_TITLE: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_WZ_TITLE'),
                         FIFTH_PAGE_TITLE: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_TITLE'),
-                        FIFTH_PAGE_SECTION_1_TITLE: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_1_TITLE'),
-                        FIFTH_PAGE_SECTION_1_CHECKBOX: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_1_CHECKBOX'),
                         FIFTH_PAGE_SECTION_1_HEADING: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_1_HEADING'),
                         FIFTH_PAGE_SECTION_1_DISCRIPTION_1: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_1_DISCRIPTION_1'),
                         FIFTH_PAGE_SECTION_1_DISCRIPTION_2: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_1_DISCRIPTION_2'),
                         FIFTH_PAGE_SECTION_2_TITLE: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_2_TITLE'),
                         FIFTH_PAGE_SECTION_2_DISCRIPTION: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_2_DISCRIPTION'),
+                        FIFTH_PAGE_SECTION_2_SEVERITY: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_2_SEVERITY'),
                         FIFTH_PAGE_SECTION_2_EMAIL: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_2_EMAIL'),
                         FIFTH_PAGE_SECTION_2_EMAIL_TOOLTIP: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_2_EMAIL_TOOLTIP'),
                         FIFTH_PAGE_SECTION_2_EMAIL_VALIDATION: widgetUtilityService.translate('outbreakAlertConfiguration.FIFTH_PAGE_SECTION_2_EMAIL_VALIDATION'),
@@ -809,6 +785,16 @@
                         DIRECTIVE_TIMEZONE_TOOLTIP: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_TIMEZONE_TOOLTIP'),
                         DIRECTIVE_SAVE_BUTTON: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_SAVE_BUTTON'),
                         DIRECTIVE_SAVEING_BUTTON: widgetUtilityService.translate('outbreakAlertConfiguration.DIRECTIVE_SAVEING_BUTTON'),
+
+                        THREAT_HUNT_INTEGRATION_CONFIG_CHANGE: widgetUtilityService.translate('outbreakAlertConfiguration.THREAT_HUNT_INTEGRATION_CONFIG_CHANGE'),
+                        THREAT_HUNT_INTEGRATION_CONFIG_TITLE1: widgetUtilityService.translate('outbreakAlertConfiguration.THREAT_HUNT_INTEGRATION_CONFIG_TITLE1'),
+                        THREAT_HUNT_INTEGRATION_CONFIG_MSG1: widgetUtilityService.translate('outbreakAlertConfiguration.THREAT_HUNT_INTEGRATION_CONFIG_MSG1'),
+                        THREAT_HUNT_INTEGRATION_CONFIG_MSG2: widgetUtilityService.translate('outbreakAlertConfiguration.THREAT_HUNT_INTEGRATION_CONFIG_MSG2'),
+                        THREAT_HUNT_INTEGRATION_CONFIG_MSG3: widgetUtilityService.translate('outbreakAlertConfiguration.THREAT_HUNT_INTEGRATION_CONFIG_MSG3'),
+                        THREAT_HUNT_INTEGRATION_CONFIG_MSG4: widgetUtilityService.translate('outbreakAlertConfiguration.THREAT_HUNT_INTEGRATION_CONFIG_MSG4'),
+                        THREAT_HUNT_INTEGRATION_HEALTH_TITLE: widgetUtilityService.translate('outbreakAlertConfiguration.THREAT_HUNT_INTEGRATION_HEALTH_TITLE'),
+                        THREAT_HUNT_INTEGRATION_CONFIG_NAME: widgetUtilityService.translate('outbreakAlertConfiguration.THREAT_HUNT_INTEGRATION_CONFIG_NAME'),
+                        THREAT_HUNT_INTEGRATION_DEFAULT: widgetUtilityService.translate('outbreakAlertConfiguration.THREAT_HUNT_INTEGRATION_DEFAULT'),
                     };
                 });
             }
