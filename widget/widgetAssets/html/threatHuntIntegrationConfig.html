@@ -13,8 +13,7 @@
             <div class="connector-form">
               <div class="row">
                 <div class="col-md-6">
-                  <label for="configuration-selection" class="control-label configuration-selection">Select
-                    Configuration</label>
+                  <label for="configuration-selection" class="control-label configuration-selection">{{viewWidgetVars.THREAT_HUNT_INTEGRATION_CONFIG_CHANGE}}</label>
                   <select class="form-control" id="configuration-selection" data-ng-disabled="processing"
                     name="configurationsSelection" data-ng-model="selected.configuration"
                     data-ng-options="configuration as configuration.name for configuration in connector.configuration track by configuration.id"
@@ -29,15 +28,14 @@
                 <div class="col-md-5">
                   <div class="connector-health">
                     <span class="connector-conf-check text-uppercase"> <i class="fa fa-cog" aria-hidden="true"></i>
-                      Configuration:
+                      {{viewWidgetVars.THREAT_HUNT_INTEGRATION_CONFIG_TITLE1}}
                       <span
                         data-ng-if="connector.configuration.length === 0 && !formHolder.connectorForm[$index].$dirty && input.selectedConfiguration.status !== 0"
-                        class="text-info">Not Configured</span>
-                      <span data-ng-if="formHolder.connectorForm[$index].$valid" class="label-completed">Completed</span>
+                        class="text-info">{{viewWidgetVars.THREAT_HUNT_INTEGRATION_CONFIG_MSG1}}</span>
+                      <span data-ng-if="formHolder.connectorForm[$index].$valid" class="label-completed">{{viewWidgetVars.THREAT_HUNT_INTEGRATION_CONFIG_MSG2}}</span>
                       <span data-ng-if="!formHolder.connectorForm[$index].$valid && formHolder.connectorForm[$index].$dirty"
-                        class="label-inprogress">In Progress</span>
-                      <span data-ng-if="input.selectedConfiguration.status===0" class="label-partial">Partially
-                        Configured</span>
+                        class="label-inprogress">{{viewWidgetVars.THREAT_HUNT_INTEGRATION_CONFIG_MSG3}}</span>
+                      <span data-ng-if="input.selectedConfiguration.status===0" class="label-partial">{{viewWidgetVars.THREAT_HUNT_INTEGRATION_CONFIG_MSG4}}</span>
                     </span>
                   </div>
                 </div>
@@ -46,10 +44,9 @@
                   <div class="connector-health"
                     data-ng-show="input.selectedConfiguration !== null && input.selectedConfiguration.config_id != null && formHolder.connectorForm[$index].$valid">
                     <span class="connector-health-check text-uppercase"> <i class="fa fa-stethoscope"
-                        aria-hidden="true"></i> Health Check: <span>
+                        aria-hidden="true"></i>{{viewWidgetVars.THREAT_HUNT_INTEGRATION_HEALTH_TITLE}}<span>
                         <span
                           class="label-{{input.selectedConfiguration.status|lowercase}}">{{input.selectedConfiguration.status}}</span>
-  
                       </span> </span>
                     <a class="connector-refresh-icon" href='#' data-ng-click='checkHealth(input.selectedConfiguration)'>
                       <span class="fa fa-refresh" data-ng-class="{'fa-spin':healthCheckProcessing}"
@@ -58,25 +55,6 @@
                     <span class="connector-info-icon" data-uib-tooltip='{{input.selectedConfiguration._message}}'
                       tooltip-class="break-word" data-tooltip-append-to-body='true'>
                       <i class='icon icon-information'></i>
-                    </span>
-                    <span data-ng-if="params.showTrainOption">
-                      <span class="margin-left-sm margin-right-sm">|</span>
-                      <span data-ng-if="!params.trainigInProgress">
-                        <a class="text-uppercase" href='#' data-ng-click='train(input.selectedConfiguration)'>Train</a>
-                        <span class="connector-info-icon" data-uib-tooltip="Initiates training for the ML model based on the parameters defined. Once the training is successfully completed, the connector will show up as Available."
-                         tooltip-class="break-word"data-tooltip-append-to-body='true'>
-                          <i class='icon icon-information'></i>
-                        </span>
-                      </span>
-                      <span data-ng-if="params.trainigInProgress" class="text-uppercase label-inprogress">Training In Progress</span>
-                      <span class="margin-left-sm margin-right-sm">|</span>
-                      <a class="text-uppercase" href='#' data-ng-click='updateSchedule(input.selectedConfiguration)'>{{params.cronDescriber === '' ? 'Schedule' : params.cronDescriber}}</a>
-                      <span class="fa fa-refresh fa-spin" data-ng-show="params.scheduleProcessing"></span>
-                      <a target='_blank' rel="noopener noreferrer" class="margin-left-sm" data-ng-if="params.schedule && params.schedule.scheduleAvailable" title="Open playbook collection in new window." data-ui-sref="main.workflow.collections.playbooks({ id: input.selectedConfiguration.config_id })"><i class="fa icon icon-playbooks"></i></a>
-                      <span class="connector-info-icon" data-uib-tooltip="Allows scheduling of the ML model's training, to ensure it gets trained on the new incoming data in the system regularly."
-                      tooltip-class="break-word" data-tooltip-append-to-body='true'>
-                      <i class='icon icon-information'></i>
-                    </span>
                     </span>
                   </div>
                 </div>
@@ -87,7 +65,7 @@
                     <fieldset data-ng-disabled="!permission.update || processing" class="margin-top-sm">
                       <div class="form-group"
                         data-ng-class="{ 'has-error': formHolder.connectorForm[$index].connectorname.$invalid && formHolder.connectorForm[$index].connectorname.$touched }">
-                        <label for="connectorname" class="control-label">Configuration Name&nbsp;<span
+                        <label for="connectorname" class="control-label">{{viewWidgetVars.THREAT_HUNT_INTEGRATION_CONFIG_NAME}}&nbsp;<span
                             class="text-danger">*</span>
                         </label>
                         <input id="connectorname" type="text" name="connectorname"
@@ -101,8 +79,7 @@
                             <input id="connectordefault" type="checkbox" name="connectordefault"
                               data-ng-model="input.selectedConfiguration.default"
                               data-ng-change="removeDefaultFromOthers()"></input>
-                            <label for="connectordefault" class="control-label">&nbsp;&nbsp; Mark as default
-                              configuration</label>
+                            <label for="connectordefault" class="control-label">&nbsp;&nbsp;{{viewWidgetVars.THREAT_HUNT_INTEGRATION_DEFAULT}}</label>
                           </div>
                         </div>
                         <!-- RBAC -->

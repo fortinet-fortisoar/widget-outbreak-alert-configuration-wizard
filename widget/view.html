@@ -210,8 +210,8 @@
                               <hr class="margin-0">
                               <div ng-form="formHolder.connectorForm[$index]" name="formHolder.connectorForm[$index]">
                                 <div data-ng-if="selectedConnector" id="outbreakConnectorWizard-{{$index}}"
-                                  class="margin-top-negative-20 margin-top-md padding-left-0 padding-right-0 connector-config-width"
-                                  data-ng-include="'widgets/installed/outbreakAlertConfiguration-2.0.0/widgetAssets/threatHuntIntegrationConfig.html'">
+                                  class="margin-top-negative-20 margin-top-md padding-left-0 padding-right-0 threat-hunt-connector-config-width"
+                                  data-ng-include="'widgets/installed/outbreakAlertConfiguration-2.0.0/widgetAssets/html/threatHuntIntegrationConfig.html'">
                                 </div>
                                 <div data-ng-show="selectedConnector" class="col-md-12 margin-top-18">
                                   <button type="button" class="btn btn-primary"
@@ -399,39 +399,26 @@
                   <div class="font-size-30 muted-80 line-height-1">{{viewWidgetVars.FIFTH_PAGE_TITLE}}</div>
                   <div
                     class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
-                    <div class="checkbox">
-                      <label for="resetAuditLogs" class="muted-80">
-                        <input id="autoInstall" type="checkbox" name="autoInstall" data-ng-model="autoInstall.enabled"
-                          data-cs-focus>&nbsp;{{viewWidgetVars.FIFTH_PAGE_SECTION_1_CHECKBOX}}
-                      </label>
-                    </div>
-                    <div data-ng-hide="!autoInstall.enabled">
-                      <div class="mertics-widget-border-bottom margin-bottom-lg"></div>
-                      <div class="control-label display-block"><i
-                          class="margin-right-sm icon icon-settings-01"></i>{{viewWidgetVars.FIFTH_PAGE_SECTION_1_HEADING}}
-                        <span class="required text-danger">*</span>
-                      </div>
-                      <div class="muted margin-bottom-lg padding-bottom-25">
-                        <small
-                          class="margin-top-8 margin-right-md pull-left">{{viewWidgetVars.FIFTH_PAGE_SECTION_1_DISCRIPTION_1}}
-                        </small>
-                        <small
-                          class="margin-top-8 margin-right-md pull-left">{{viewWidgetVars.FIFTH_PAGE_SECTION_1_DISCRIPTION_2}}
-                        </small>
-                      </div>
-                      <div class="cs-select margin-top-27">
-                        <ui-select name="select_outbreak_type" id="select_outbreak_type"
-                          data-ng-model="selectedEnv.installOutbreakType" data-ng-required="true" multiple
-                          class="custom-multi-select" append-to-body="false">
-                          <ui-select-match placeholder="Select Severity...">{{$item}}
-                          </ui-select-match>
-                          <ui-select-choices
-                            repeat="option in outbreakAlertSeverityList | filter: $select.search | orderBy: 'item'"
-                            refresh-delay="200" ng-show="($select.items.length > 0) ||">
-                            <div ng-bind-html="option | highlight: $select.search"></div>
-                          </ui-select-choices>
-                        </ui-select>
-                      </div>
+                    <div class="font-size-18 muted-80 line-height-1">{{viewWidgetVars.FIFTH_PAGE_SECTION_1_HEADING}}
+                    </div><br />
+                    <p class="font-Size-13 muted">
+                      <span>{{viewWidgetVars.FIFTH_PAGE_SECTION_1_DISCRIPTION_2}}</span>
+                    </p>
+                    <label for="fromSeverity" class="control-label">{{viewWidgetVars.FIFTH_PAGE_SECTION_2_SEVERITY}}
+                      <span data-uib-tooltip="{{viewWidgetVars.FIFTH_PAGE_SECTION_1_DISCRIPTION_1}}"
+                        data-tooltip-append-to-body="true"><i class="icon icon-information"></i></span></label>
+                    <div class="cs-select">
+                      <ui-select name="select_outbreak_type" id="select_outbreak_type"
+                        data-ng-model="selectedEnv.installOutbreakType" data-ng-required="true" multiple
+                        class="custom-multi-select" append-to-body="false">
+                        <ui-select-match placeholder="Select Severity...">{{$item}}
+                        </ui-select-match>
+                        <ui-select-choices
+                          repeat="option in outbreakAlertSeverityList | filter: $select.search | orderBy: 'item'"
+                          refresh-delay="200" ng-show="($select.items.length > 0) ||">
+                          <div ng-bind-html="option | highlight: $select.search"></div>
+                        </ui-select-choices>
+                      </ui-select>
                     </div>
                   </div>
                   <div ng-form="notificationForm" name="notificationForm">
@@ -442,18 +429,14 @@
                       <p class="font-Size-13 muted">
                         <span>{{viewWidgetVars.FIFTH_PAGE_SECTION_2_DISCRIPTION}}</span>
                       </p>
-                      <div class="form-group"
-                        data-ng-class="{'has-error': installationForm.notificationForm.fromEmailAddress.$touched && installationForm.notificationForm.fromEmailAddress.$invalid }">
-                        <label for="fromEmailAddress" class="control-label">{{viewWidgetVars.FIFTH_PAGE_SECTION_2_EMAIL
-                          }} <span data-uib-tooltip="{{viewWidgetVars.FIFTH_PAGE_SECTION_2_EMAIL_TOOLTIP}}"
-                            data-tooltip-append-to-body="true" class="text-danger"><i
-                              class="icon icon-information"></i>*</span></label>
-                        <input id="fromEmailAddress" type="text" class="form-control input-sm" name="fromEmailAddress"
-                          data-ng-model="selectedEnv.emailAddress" cs-email required>
-                        <div
-                          data-ng-show="installationForm.notificationForm.fromEmailAddress.$touched && installationForm.notificationForm.fromEmailAddress.$error.required">
-                          <span class="text-danger">{{viewWidgetVars.FIFTH_PAGE_SECTION_2_EMAIL_VALIDATION}}</span>
-                        </div>
+                      <label for="fromEmailAddress" class="control-label">{{viewWidgetVars.FIFTH_PAGE_SECTION_2_EMAIL}}
+                        <span data-uib-tooltip="{{viewWidgetVars.FIFTH_PAGE_SECTION_2_EMAIL_TOOLTIP}}"
+                          data-tooltip-append-to-body="true"><i class="icon icon-information"></i></span></label>
+                      
+                      <input id="fromEmailAddress" type="text" class="form-control input-sm" name="fromEmailAddress"
+                        data-ng-model="selectedEnv.emailAddress" cs-email>
+                      <div data-ng-show="installationForm.notificationForm.fromEmailAddress.$invalid">
+                        <span class="text-danger">{{viewWidgetVars.FIFTH_PAGE_SECTION_2_EMAIL_VALIDATION}}</span>
                       </div>
                     </div>
                   </div>
@@ -468,8 +451,7 @@
           id="solutionpack-configure-back-env-btn" data-ng-click="backNotification()"><i
             class="fa fa-chevron-left margin-right-sm"></i>{{viewWidgetVars.FIFTH_PAGE_BACK}}</button>
         <button type="button" class="btn btn-primary pull-right btn-sm margin-top-lg margin-right-lg"
-          data-ng-click="moveToFinish(installationForm)"
-          data-ng-disabled="(selectedEnv.installOutbreakType && selectedEnv.installOutbreakType.length === 0 && isPlaybookExecuted)"
+          data-ng-click="moveToFinish(installationForm)" data-ng-disabled="(isPlaybookExecuted)"
           id="solutionpack-investigation-btn">{{viewWidgetVars.FIFTH_PAGE_NEXT}}<i class="fa margin-left-sm"
             data-ng-class="isPlaybookExecuted ? 'fa-spin fa-spinner' : 'fa-chevron-right'"></i>
         </button>
@@ -493,22 +475,22 @@
                   <h6 class="font-weight-normal margin-bottom-sm modal-title text-transform-none">
                     {{viewWidgetVars.SIXTH_PAGE_SUMMARY}}</h6>
                   <p><i class="completed icon icon-approval margin-right-md font-size-16"></i><span
-                      class="bold muted">{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_1}} {{selectedEnv.huntTools.join(',
-                      ')}}</span></p>
+                      class="bold muted">{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_1}} {{displayHuntTools}}</span></p>
                   <p><i class="completed icon icon-approval margin-right-md font-size-16"></i><span
-                      class="bold muted">{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_2}} {{selectedEnv.huntTools.join(',
-                      ')}}</span></p>
+                      class="bold muted">{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_2}} {{displayHuntTools}}</span></p>
                   <p><i class="completed icon icon-approval margin-right-md font-size-16"></i><span
                       class="bold muted">{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_3}} {{selectedEnv.timeFrameDays}}
                       days</span></p>
                   <p><i class="completed icon icon-approval margin-right-md font-size-16"></i><span
                       class="bold muted">{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_4}}
                       {{selectedEnv.scheduleFrequency}}</span></p>
-                  <p><i class="completed icon icon-approval margin-right-md font-size-16"></i><span
+                  <p data-ng-if="selectedEnv.installOutbreakType.length > 0"><i
+                      class="completed icon icon-approval margin-right-md font-size-16"></i><span
                       class="bold muted">{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_5}}
                       {{selectedEnv.installOutbreakType.join(', ')}}
                       {{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_5_1}}</span></p>
-                  <p><i class="completed icon icon-approval margin-right-md font-size-16"></i><span
+                  <p data-ng-if="selectedEnv.emailAddress !== null"><i
+                      class="completed icon icon-approval margin-right-md font-size-16"></i><span
                       class="bold muted">{{viewWidgetVars.SIXTH_PAGE_SUMMARY_HEADING_6}}
                       {{selectedEnv.emailAddress}}</span></p>
                 </div>
@@ -526,7 +508,7 @@
                 class="solid-border element-secondary-bgcolor padding-20 margin-top-md padding-top-md padding-bottom-md">
                 <p class="font-size-13 margin-bottom-0 muted">{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_1}}</p>
                 <p class="font-size-13 margin-bottom-0 muted">{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_1}}<a
-                    data-ng-click="close()">'{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_2}}'</a>{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_3}}
+                    data-ng-click="close()">{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_2}}</a>{{viewWidgetVars.SIXTH_PAGE_DISCRIPTION_2_3}}
                 </p>
               </div>
             </div>
