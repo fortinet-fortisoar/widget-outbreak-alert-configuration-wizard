@@ -207,6 +207,9 @@
                     if ($scope.selectedEnv.huntTools[0] !== nistConnectorName) {
                         $scope.selectedEnv.huntTools.splice(0, 0, nistConnectorName);
                     }
+                    $scope.toggle = [];
+                    $scope.toggleConnectorConfig = [];
+                    $scope.connectorHealthStatus = [];
                     $scope.threatHuntToolsParams = response['hydra:member'][0].jSONValue;
                     for (let index = 0; index < $scope.selectedEnv.huntTools.length; index++) {
                         $scope.toggle[index] = false;
@@ -516,7 +519,6 @@
             $scope.isConnectorsHealthy = true;
             // Array to hold all promises
             let promises = [];
-
             for (let index = 0; index < $scope.selectedEnv.huntTools.length; index++) {
                 let huntToolName = _.get($scope.huntToolsMapping, $scope.selectedEnv.huntTools[index]);
                 let queryBody = {
