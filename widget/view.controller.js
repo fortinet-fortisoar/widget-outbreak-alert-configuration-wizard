@@ -828,7 +828,7 @@
             pagedCollection.query = new Query(query);
             pagedCollection.load().then(function () {
                 console.log(pagedCollection);
-                if (pagedCollection.data['hydra:totalItems'] > 0) {
+                if (pagedCollection.data['hydra:member'].length > 0 > 0) {
                     $scope.selectedEnv = JSON.parse(pagedCollection.data['hydra:member'][0].jSONValue).saveConfig;
                     let index = $scope.selectedEnv.huntTools.indexOf(nistConnectorName);
                     if (index !== -1) {
