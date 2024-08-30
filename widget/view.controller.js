@@ -8,9 +8,9 @@
         .module('cybersponse')
         .controller('outbreakAlertConfiguration200Ctrl', outbreakAlertConfiguration200Ctrl);
 
-    outbreakAlertConfiguration200Ctrl.$inject = ['$scope', '$http', 'WizardHandler', '$controller', '$state', 'connectorService', 'marketplaceService', 'CommonUtils', '$window', 'toaster', 'currentPermissionsService', '_', '$resource', 'API', 'ALL_RECORDS_SIZE', 'widgetBasePath', '$rootScope', 'websocketService', '$timeout', 'widgetUtilityService'];
+    outbreakAlertConfiguration200Ctrl.$inject = ['$scope', '$http', 'WizardHandler', '$controller', '$state', 'connectorService', 'marketplaceService', 'CommonUtils', '$window', 'toaster', 'currentPermissionsService', '_', '$resource', 'API', 'ALL_RECORDS_SIZE', 'widgetBasePath', '$rootScope', 'websocketService', '$timeout', 'widgetUtilityService', 'PagedCollection', 'Query'];
 
-    function outbreakAlertConfiguration200Ctrl($scope, $http, WizardHandler, $controller, $state, connectorService, marketplaceService, CommonUtils, $window, toaster, currentPermissionsService, _, $resource, API, ALL_RECORDS_SIZE, widgetBasePath, $rootScope, websocketService, $timeout, widgetUtilityService) {
+    function outbreakAlertConfiguration200Ctrl($scope, $http, WizardHandler, $controller, $state, connectorService, marketplaceService, CommonUtils, $window, toaster, currentPermissionsService, _, $resource, API, ALL_RECORDS_SIZE, widgetBasePath, $rootScope, websocketService, $timeout, widgetUtilityService, PagedCollection, Query) {
         $controller('BaseConnectorCtrl', {
             $scope: $scope
         });
@@ -256,7 +256,7 @@
                     $scope.processingPicklist = false;
                     $scope.huntToolsMapping = response['hydra:member'][0].jSONValue;
                     $scope.threatHuntTools = Object.keys($scope.huntToolsMapping).sort();
-                    const index = $scope.threatHuntTools.indexOf(nistConnectorName);
+                    let index = $scope.threatHuntTools.indexOf(nistConnectorName);
                     if (index !== -1) {
                         $scope.threatHuntTools.splice(index, 1);
                     }
@@ -812,6 +812,30 @@
         }
 
         function init() {
+            var pagedCollection = new PagedCollection('keys');
+            var query = {
+                logic: 'AND',
+                limit: 1,
+                filters: [{
+                    field: 'key',
+                    operator: 'eq',
+                    value: 'outbreak-alert-config'
+                }
+                ],
+                __selectFields: ["jSONValue"]
+            };
+
+            pagedCollection.query = new Query(query);
+            pagedCollection.load().then(function () {
+                console.log(pagedCollection);
+                if (pagedCollection.data['hydra:totalItems'] > 0) {
+                    $scope.selectedEnv = JSON.parse(pagedCollection.data['hydra:member'][0].jSONValue).saveConfig;
+                    let index = $scope.selectedEnv.huntTools.indexOf(nistConnectorName);
+                    if (index !== -1) {
+                        $scope.selectedEnv.huntTools.splice(index, 1);
+                    }
+                }
+            });
             if (!currentPermissionsService.availablePermission('workflows', 'execute')) {
                 toaster.error({
                     body: "You dont have permission to execute the playbook"
