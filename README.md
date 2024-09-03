@@ -1,20 +1,20 @@
 # Release Information
 
-- **Version**: 1.0.1
+- **Version**: 2.0.0
 
 - **Certified**: Yes
 
 - **Publisher**: Fortinet  
 
-- **Compatibility**: 7.4.0 and later
+- **Compatibility**: 7.6.0 and later
 
 - **Applicable**: Outbreak Response Framework Solution Pack
 
-- [**Release Notes**](./docs/release_notes.md)
+- [**Release Notes**](./widget/release_notes.md)
 
 # Overview
 
-The **Outbreak Response Framework Configuration** widget helps set up and configure *Threat Detection* and *Ticketing/ITSM* integrations. This widget is responsible for running the wizard that streamlines the Outbreak response framework configuration.
+The *Outbreak Response Framework* solution pack uses the **Outbreak Response Framework Configuration** wizard to configure *Threat Detection* integrations within a FortiSOAR environment. The configuration process includes selecting a Threat Detection integration, such as FortiSIEM or FortiAnalyzer, and defining an investigation schedule for the outbreaks.
 
 ## Next Steps
 
