@@ -6,11 +6,11 @@
 (function () {
     angular
         .module('cybersponse')
-        .controller('outbreakAlertConfiguration200Ctrl', outbreakAlertConfiguration200Ctrl);
+        .controller('outbreakAlertConfiguration210Ctrl', outbreakAlertConfiguration210Ctrl);
 
-    outbreakAlertConfiguration200Ctrl.$inject = ['$scope', '$http', 'WizardHandler', '$controller', '$state', 'connectorService', 'marketplaceService', 'CommonUtils', '$window', 'toaster', 'currentPermissionsService', '_', '$resource', 'API', 'ALL_RECORDS_SIZE', 'widgetBasePath', '$rootScope', 'websocketService', '$timeout', 'widgetUtilityService', 'PagedCollection', 'Query'];
+    outbreakAlertConfiguration210Ctrl.$inject = ['$scope', '$http', 'WizardHandler', '$controller', '$state', 'connectorService', 'marketplaceService', 'CommonUtils', '$window', 'toaster', 'currentPermissionsService', '_', '$resource', 'API', 'ALL_RECORDS_SIZE', 'widgetBasePath', '$rootScope', 'websocketService', '$timeout', 'widgetUtilityService', 'PagedCollection', 'Query'];
 
-    function outbreakAlertConfiguration200Ctrl($scope, $http, WizardHandler, $controller, $state, connectorService, marketplaceService, CommonUtils, $window, toaster, currentPermissionsService, _, $resource, API, ALL_RECORDS_SIZE, widgetBasePath, $rootScope, websocketService, $timeout, widgetUtilityService, PagedCollection, Query) {
+    function outbreakAlertConfiguration210Ctrl($scope, $http, WizardHandler, $controller, $state, connectorService, marketplaceService, CommonUtils, $window, toaster, currentPermissionsService, _, $resource, API, ALL_RECORDS_SIZE, widgetBasePath, $rootScope, websocketService, $timeout, widgetUtilityService, PagedCollection, Query) {
         $controller('BaseConnectorCtrl', {
             $scope: $scope
         });
@@ -602,7 +602,7 @@
                     const notConfigConnectors = _.uniq(indices).map(index => $scope.selectedEnv.huntTools[index]);
                     const toasterMessage = 'Connector ' + notConfigConnectors.join(', ') + ' is not configured';
                     if(defaultConfigNotPresent.length === 0){
-                         if (notConfigConnectors.length === 0 && defaultConfigNotPresent.length === 0) {
+                         if (notConfigConnectors.length === 0) {
                                 $scope.selectedEnv.installOutbreakType = $scope.outbreakAlertSeverityList.slice();
                                 WizardHandler.wizard('OutbreaksolutionpackWizard').next();
                             } else {
