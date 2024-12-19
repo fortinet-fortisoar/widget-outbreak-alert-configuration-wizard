@@ -21,7 +21,7 @@
         jsonData: '='
       },
       controller: 'BaseCtrl',
-      templateUrl: 'widgets/installed/outbreakAlertConfiguration-2.0.0/widgetAssets/html/schedulePlaybook.html',
+      templateUrl: 'widgets/installed/outbreakAlertConfiguration-2.1.0/widgetAssets/html/schedulePlaybook.html',
       link: link
     };
     function link(scope) {
