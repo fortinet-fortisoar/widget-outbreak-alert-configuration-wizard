@@ -6,11 +6,11 @@
 (function () {
     angular
         .module('cybersponse')
-        .controller('outbreakAlertConfiguration200Ctrl', outbreakAlertConfiguration200Ctrl);
+        .controller('outbreakAlertConfiguration210Ctrl', outbreakAlertConfiguration210Ctrl);
 
-    outbreakAlertConfiguration200Ctrl.$inject = ['$scope', '$http', 'WizardHandler', '$controller', '$state', 'connectorService', 'marketplaceService', 'CommonUtils', '$window', 'toaster', 'currentPermissionsService', '_', '$resource', 'API', 'ALL_RECORDS_SIZE', 'widgetBasePath', '$rootScope', 'websocketService', '$timeout', 'widgetUtilityService', 'PagedCollection', 'Query'];
+    outbreakAlertConfiguration210Ctrl.$inject = ['$scope', '$http', 'WizardHandler', '$controller', '$state', 'connectorService', 'marketplaceService', 'CommonUtils', '$window', 'toaster', 'currentPermissionsService', '_', '$resource', 'API', 'ALL_RECORDS_SIZE', 'widgetBasePath', '$rootScope', 'websocketService', '$timeout', 'widgetUtilityService', 'PagedCollection', 'Query'];
 
-    function outbreakAlertConfiguration200Ctrl($scope, $http, WizardHandler, $controller, $state, connectorService, marketplaceService, CommonUtils, $window, toaster, currentPermissionsService, _, $resource, API, ALL_RECORDS_SIZE, widgetBasePath, $rootScope, websocketService, $timeout, widgetUtilityService, PagedCollection, Query) {
+    function outbreakAlertConfiguration210Ctrl($scope, $http, WizardHandler, $controller, $state, connectorService, marketplaceService, CommonUtils, $window, toaster, currentPermissionsService, _, $resource, API, ALL_RECORDS_SIZE, widgetBasePath, $rootScope, websocketService, $timeout, widgetUtilityService, PagedCollection, Query) {
         $controller('BaseConnectorCtrl', {
             $scope: $scope
         });
@@ -39,6 +39,7 @@
         $scope.toggleRemediation = true;
         $scope.toggleConnectorConfig = [];
         $scope.connectorHealthStatus = [];
+        $scope.connectorDefaultStatus = [];
         $scope.toggleRemediationConfig = false;
         $scope.isPlaybookExecuted = false;
         $scope.toggleAdvancedSettings = toggleAdvancedSettings;
@@ -55,6 +56,7 @@
         $scope.finishInfoGraphics = widgetBasePath + 'images/finish.png';
         $scope.widgetCSS = widgetBasePath + 'widgetAssets/css/wizard-style.css';
         $scope.params = { activeTab: 0 };
+        $scope.noDefaultConnectorSelected = false;
         const nistConnectorName = 'NIST National Vulnerability Database';
         $scope.ingestionDetails = {
             "name": "Outbreak-Alerts",
@@ -210,11 +212,14 @@
                     $scope.toggle = [];
                     $scope.toggleConnectorConfig = [];
                     $scope.connectorHealthStatus = [];
+                    $scope.connectorDefaultStatus = [];
                     $scope.threatHuntToolsParams = response['hydra:member'][0].jSONValue;
                     for (let index = 0; index < $scope.selectedEnv.huntTools.length; index++) {
                         $scope.toggle[index] = false;
                         $scope.toggleConnectorConfig[index] = true;
                         $scope.connectorHealthStatus[index] = false;
+                        $scope.connectorDefaultStatus[index] = true;
+
                     }
                     loadActiveTab($state.params.tabIndex, $state.params.tab);
                     WizardHandler.wizard('OutbreaksolutionpackWizard').next();
@@ -545,13 +550,30 @@
                                         });
                                         return Promise.reject('Connector not installed');
                                     }
+                                    // check default 
+                                    var default_connector = connector.configuration.find(function (config) {
+                                        return config.default;
+                                    });
+                                    //check if any of the cconnector config is not default
+                                    // nist-nvd check is skipped
+                                    $scope.connectorDefaultStatus[index] = true;
+                                    if(angular.isUndefined(default_connector)){
+                                        let errorMessage = `The default configuration for the ${connector.label} connector not found.`
+                                         toaster.error({
+                                            body: errorMessage
+                                         });
+                                        $scope.connectorDefaultStatus[index] = false;
+                                        return Promise.reject('Default configuration not found');
+                                    }
                                     return marketplaceService.getContentDetails(API.BASE + 'solutionpacks/' + huntToolDetails[0].uuid + '?$relationships=true')
                                         .then(function (response) {
                                             if (connector.configuration.length > 0) {
                                                 $scope.isConnectorsConfigured = true;
-                                                return connectorService.getConnectorHealth(response.data, connector.configuration[0].config_id, connector.configuration[0].agent)
+                                                return connectorService.getConnectorHealth(response.data, default_connector.config_id, default_connector.agent)
                                                     .then(function (data) {
-                                                        if (data.status === "Available") {
+                                                        // added data.name==="nist-nvd" to skip nist health check; 
+                                                        // can remove it when not required 
+                                                        if (data.name==="nist-nvd" || data.status === "Available") { 
                                                             $scope.connectorHealthStatus[index] = true;
                                                         }
                                                     });
@@ -576,24 +598,27 @@
                     // After all promises are resolved, evaluate the condition
                     $scope.isConnectorsHealthy = false;
                     let indices = _.map(_.filter($scope.connectorHealthStatus, value => value === false), (value, index) => $scope.connectorHealthStatus.indexOf(value, index));
+                    let defaultConfigNotPresent = _.filter($scope.connectorDefaultStatus, value => value === false);
                     const notConfigConnectors = _.uniq(indices).map(index => $scope.selectedEnv.huntTools[index]);
                     const toasterMessage = 'Connector ' + notConfigConnectors.join(', ') + ' is not configured';
-                    if (notConfigConnectors.length === 0) {
-                        $scope.selectedEnv.installOutbreakType = $scope.outbreakAlertSeverityList.slice();
-                        WizardHandler.wizard('OutbreaksolutionpackWizard').next();
-                    } else {
-                        var huntToolIndex = $scope.selectedEnv.huntTools.indexOf(notConfigConnectors[0]);
-                        $scope.params.activeTab = huntToolIndex;
-                        loadActiveTab(huntToolIndex, notConfigConnectors[0]);
-                        var connectorConfig = document.getElementById('accordion-connector-config-' + huntToolIndex);
-                        connectorConfig.childNodes[2].classList.add('in');
-                        toggleConnectorConfigSettings(huntToolIndex);
-                        var paramsConfig = document.getElementById('accordion-params-config-' + huntToolIndex);
-                        paramsConfig.childNodes[2].classList.replace('in', null);
-                        toggleAdvancedSettings(huntToolIndex);
-                        toaster.error({
-                            body: toasterMessage
-                        });
+                    if(defaultConfigNotPresent.length === 0){
+                         if (notConfigConnectors.length === 0) {
+                                $scope.selectedEnv.installOutbreakType = $scope.outbreakAlertSeverityList.slice();
+                                WizardHandler.wizard('OutbreaksolutionpackWizard').next();
+                            } else {
+                                var huntToolIndex = $scope.selectedEnv.huntTools.indexOf(notConfigConnectors[0]);
+                                $scope.params.activeTab = huntToolIndex;
+                                loadActiveTab(huntToolIndex, notConfigConnectors[0]);
+                                var connectorConfig = document.getElementById('accordion-connector-config-' + huntToolIndex);
+                                connectorConfig.childNodes[2].classList.add('in');
+                                toggleConnectorConfigSettings(huntToolIndex);
+                                var paramsConfig = document.getElementById('accordion-params-config-' + huntToolIndex);
+                                paramsConfig.childNodes[2].classList.replace('in', null);
+                                toggleAdvancedSettings(huntToolIndex);
+                                toaster.error({
+                                    body: toasterMessage
+                                });
+                            }
                     }
                 })
                 .catch(error => {
